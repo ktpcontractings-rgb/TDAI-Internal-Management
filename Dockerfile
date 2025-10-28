@@ -1,20 +1,21 @@
-FROM node:18-alpine
+FROM node:18-slim
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files first
+COPY package.json package-lock.json ./
 
-# Clean install without cache
-RUN npm cache clean --force && \
-    npm install --no-optional --legacy-peer-deps
+# Install dependencies with clean slate
+RUN rm -rf node_modules && \
+    npm cache clean --force && \
+    npm install --production
 
-# Copy application code
+# Copy rest of application
 COPY . .
 
-# Expose port
+# Expose the port
 EXPOSE 3000
 
-# Start the server
-CMD ["npm", "run", "server"]
+# Start command
+CMD ["node", "--loader", "tsx", "server/index.ts"]
 
