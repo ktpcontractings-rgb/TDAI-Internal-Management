@@ -20,20 +20,14 @@ const Card = ({ title, children }: { title: string, children: React.ReactNode })
     </div>
 );
 
-// --- Mock Data from Handoff Document ---
-// --- Data Loading (tRPC Queries) ---
-
-
 const CEODashboard: React.FC = () => {
     // State for inputs and selected agent
     const [message, setMessage] = useState('');
     const [selectedAgentId, setSelectedAgentId] = useState('cto_agent_001'); // Start with a default agent ID
-    const [codexPassword, setCodexPassword] = useState('');
-    const [decryptedCodex, setDecryptedCodex] = useState('');
 
     // --- Data Loading (tRPC Queries) ---
     const { data: agents = [], isLoading: isLoadingAgents } = trpc.agents.list.useQuery();
-    const { data: pendingDecisions = [], isLoading: isLoadingDecisions } = trpc.agents.decisions.list.useQuery();
+    const { data: pendingDecisions = [], isLoading: isLoadingDecisions } = trpc.agents.decisions.list.useQuery({ agentId: selectedAgentId }, { enabled: !!selectedAgentId });
     const { data: messages = [], isLoading: isLoadingMessages } = trpc.agents.communications.list.useQuery({ agentId: selectedAgentId }, { enabled: !!selectedAgentId });
 
     // Helper to get the tRPC context for invalidation
@@ -41,10 +35,10 @@ const CEODashboard: React.FC = () => {
 
     // --- Mutations (tRPC) ---
 
-    // 1. Initialize Agent Mutation
-    const initializeAgentMutation = trpc.agentReasoning.initializeAgent.useMutation({
+    // 1. Initialize Agent Mutation - FIXED: Changed from agentReasoning.initializeAgent to agents.initialize
+    const initializeAgentMutation = trpc.agents.initialize.useMutation({
         onSuccess: (data) => {
-            toast.success(`${data.name} initialized successfully!`);
+            toast.success(`${data.agent.name} initialized successfully!`);
             trpcUtils.agents.list.invalidate(); // Refresh agent list
         },
         onError: (error) => {
@@ -52,18 +46,29 @@ const CEODashboard: React.FC = () => {
         },
     });
 
-    // 2. Update Decision Mutation (Approve/Reject)
-    const updateDecisionMutation = trpc.agents.decisions.update.useMutation({
+    // 2. Approve Decision Mutation - FIXED: Changed from agents.decisions.update to agents.decisions.approve
+    const approveDecisionMutation = trpc.agents.decisions.approve.useMutation({
         onSuccess: () => {
-            toast.success("Decision updated successfully!");
-            trpcUtils.agents.decisions.list.invalidate(); // Refresh decisions list
+            toast.success("Decision approved successfully!");
+            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId }); // Refresh decisions list
         },
         onError: (error) => {
-            toast.error(`Failed to update decision: ${error.message}`);
+            toast.error(`Failed to approve decision: ${error.message}`);
         },
     });
 
-    // 3. Send Message Mutation
+    // 3. Reject Decision Mutation - FIXED: Changed from agents.decisions.update to agents.decisions.reject
+    const rejectDecisionMutation = trpc.agents.decisions.reject.useMutation({
+        onSuccess: () => {
+            toast.success("Decision rejected successfully!");
+            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId }); // Refresh decisions list
+        },
+        onError: (error) => {
+            toast.error(`Failed to reject decision: ${error.message}`);
+        },
+    });
+
+    // 4. Send Message Mutation
     const sendMessageMutation = trpc.agents.communications.send.useMutation({
         onSuccess: () => {
             toast.success("Message sent successfully!");
@@ -75,48 +80,38 @@ const CEODashboard: React.FC = () => {
         },
     });
 
-    // 4. Access Genesis Codex Mutation
-    const accessCodexMutation = trpc.documents.retrieve.useMutation({
-        onSuccess: (data) => {
-            toast.success("Genesis Codex decrypted successfully!");
-            setDecryptedCodex(data.content);
-        },
-        onError: (error) => {
-            toast.error(`Failed to access Codex: ${error.message}`);
-            setDecryptedCodex('');
-        },
-    });
-
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
             <h1>TDAI CEO Command Center</h1>
-            <p>Status: UI is complete, but buttons don't work yet (using mock data)</p>
+            <p>Status: All buttons are now connected to the real backend!</p>
 
             <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
                 {/* Agent Management Card */}
                 <Card title="Agent Management">
                     <h4>Initialize Agents</h4>
                     <Button
-                        onClick={() => initializeAgentMutation.mutate({ agent: 'pm' })}
+                        onClick={() => initializeAgentMutation.mutate({ role: 'PM' })}
                         disabled={initializeAgentMutation.isPending}
                     >
                         {initializeAgentMutation.isPending ? "Initializing PM..." : "Initialize PM Agent"}
                     </Button>
                     <Button
-                        onClick={() => initializeAgentMutation.mutate({ agent: 'cto' })}
+                        onClick={() => initializeAgentMutation.mutate({ role: 'CTO' })}
                         disabled={initializeAgentMutation.isPending}
                     >
                         {initializeAgentMutation.isPending ? "Initializing CTO..." : "Initialize CTO Agent"}
                     </Button>
                     <hr />
-                    <h4>Agent Status (Mock Data)</h4>
+                    <h4>Agent Status</h4>
                     {isLoadingAgents ? (
                         <div>Loading agents...</div>
+                    ) : agents.length === 0 ? (
+                        <div>No agents initialized yet. Click a button above to start!</div>
                     ) : (
                         <ul>
                             {agents.map(agent => (
                                 <li key={agent.id} onClick={() => setSelectedAgentId(agent.id)} style={{ cursor: 'pointer', fontWeight: agent.id === selectedAgentId ? 'bold' : 'normal' }}>
-                                    {agent.name} - Status: {agent.status} (Last Seen: {new Date(agent.lastSeen).toLocaleTimeString()})
+                                    {agent.name} - Status: {agent.status} (Created: {new Date(agent.createdAt).toLocaleString()})
                                 </li>
                             ))}
                         </ul>
@@ -127,22 +122,25 @@ const CEODashboard: React.FC = () => {
                 <Card title="Pending Decisions">
                     {isLoadingDecisions ? (
                         <div>Loading decisions...</div>
+                    ) : pendingDecisions.length === 0 ? (
+                        <div>No pending decisions</div>
                     ) : (
                         <ul>
                             {pendingDecisions.map(decision => (
                                 <li key={decision.id} style={{ marginBottom: '10px' }}>
-                                    <p><strong>{decision.description}</strong></p>
+                                    <p><strong>{decision.decision}</strong></p>
+                                    <p>Status: {decision.status}</p>
                                     <Button
-                                        onClick={() => updateDecisionMutation.mutate({ decisionId: decision.id, status: 'approved' })}
-                                        disabled={updateDecisionMutation.isPending}
+                                        onClick={() => approveDecisionMutation.mutate({ decisionId: decision.id })}
+                                        disabled={approveDecisionMutation.isPending || decision.status !== 'pending'}
                                     >
-                                        {updateDecisionMutation.isPending ? "Approving..." : "Approve"}
+                                        {approveDecisionMutation.isPending ? "Approving..." : "Approve Decision"}
                                     </Button>
                                     <Button
-                                        onClick={() => updateDecisionMutation.mutate({ decisionId: decision.id, status: 'rejected' })}
-                                        disabled={updateDecisionMutation.isPending}
+                                        onClick={() => rejectDecisionMutation.mutate({ decisionId: decision.id })}
+                                        disabled={rejectDecisionMutation.isPending || decision.status !== 'pending'}
                                     >
-                                        {updateDecisionMutation.isPending ? "Rejecting..." : "Reject"}
+                                        {rejectDecisionMutation.isPending ? "Rejecting..." : "Reject Decision"}
                                     </Button>
                                 </li>
                             ))}
@@ -161,36 +159,20 @@ const CEODashboard: React.FC = () => {
                         {sendMessageMutation.isPending ? "Sending..." : "Send Message"}
                     </Button>
                     <hr />
-                    <h4>Message History (Mock Data)</h4>
+                    <h4>Message History</h4>
                     {isLoadingMessages ? (
                         <div>Loading messages...</div>
+                    ) : messages.length === 0 ? (
+                        <div>No messages yet. Send a message to start!</div>
                     ) : (
                         <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #eee', padding: '8px' }}>
-                            {messages.map((msg, index) => (
-                                <div key={index} style={{ textAlign: msg.direction === 'ceo_to_agent' ? 'right' : 'left', margin: '4px 0' }}>
-                                    <span style={{ background: msg.direction === 'ceo_to_agent' ? '#e6f7ff' : '#f0f0f0', padding: '4px 8px', borderRadius: '4px', display: 'inline-block' }}>
+                            {messages.map((msg) => (
+                                <div key={msg.id} style={{ textAlign: msg.fromAgentId === 'ceo' ? 'right' : 'left', margin: '4px 0' }}>
+                                    <span style={{ background: msg.fromAgentId === 'ceo' ? '#e6f7ff' : '#f0f0f0', padding: '4px 8px', borderRadius: '4px', display: 'inline-block' }}>
                                         {msg.message} ({new Date(msg.timestamp).toLocaleTimeString()})
                                     </span>
                                 </div>
                             ))}
-                        </div>
-                    )}
-                </Card>
-
-                {/* Documents Card */}
-                <Card title="TDAI Genesis Codex">
-                    <p>Enter password to access the encrypted documentation.</p>
-                    <Input value={codexPassword} onChange={(e) => setCodexPassword(e.target.value)} />
-                    <Button
-                        onClick={() => accessCodexMutation.mutate({ documentId: 'TDAI_GENESIS_CODEX', password: codexPassword })}
-                        disabled={accessCodexMutation.isPending || !codexPassword}
-                    >
-                        {accessCodexMutation.isPending ? "Accessing..." : "Access Genesis Codex"}
-                    </Button>
-                    {decryptedCodex && (
-                        <div style={{ marginTop: '10px', border: '1px solid green', padding: '8px', background: '#e6ffe6' }}>
-                            <strong>Decrypted Content:</strong>
-                            <pre>{decryptedCodex}</pre>
                         </div>
                     )}
                 </Card>
