@@ -1,6 +1,6 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
-import { db } from './db';
+import { db } from './db-selector';
 import { nanoid } from 'nanoid';
 import { generateAgentRecommendation } from './rag-system';
 import { retrieveAndDecryptCodex } from './encryption';
