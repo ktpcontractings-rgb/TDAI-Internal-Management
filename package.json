@@ -15,6 +15,7 @@
     "@trpc/client": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "nanoid": "^5.1.6",
     "openai": "^6.7.0",
