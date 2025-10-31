@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM node:20-slim
 
 WORKDIR /app
 
@@ -16,6 +16,5 @@ COPY . .
 # Expose the port
 EXPOSE 3000
 
-# Start command
-CMD ["node", "--loader", "tsx", "server/index.ts"]
-
+# Start command using npm script
+CMD ["npm", "run", "server"]
