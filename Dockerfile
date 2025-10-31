@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 # Install dependencies with clean slate
 RUN rm -rf node_modules && \
     npm cache clean --force && \
-    npm install --production
+    npm install
 
 # Copy rest of application
 COPY . .
