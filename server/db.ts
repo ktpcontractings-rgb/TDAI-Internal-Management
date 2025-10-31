@@ -1,83 +1,128 @@
-import { pgTable, serial, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+// Database configuration that switches between mock (development) and production
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-// --- Mock Schema for Type Safety ---
-export const agents = pgTable('agents', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  status: text('status').notNull(), // e.g., 'idle', 'working', 'learning'
-  lastSeen: timestamp('last_seen').notNull(),
-});
+// Check if we're in production and have a DATABASE_URL
+const isProduction = process.env.NODE_ENV === 'production' || process.env.DATABASE_URL;
 
-export const agentDecisions = pgTable('agentDecisions', {
-  id: text('id').primaryKey(),
-  agentId: text('agent_id').notNull(),
-  description: text('description').notNull(),
-  status: text('status').notNull(), // 'pending', 'approved', 'rejected'
-});
+if (isProduction && process.env.DATABASE_URL) {
+  console.log('🗄️  Using production Neon PostgreSQL database');
+  // Use production database
+  const productionDb = await import('./db-production.js');
+  export const db = productionDb.db;
+} else {
+  console.log('🗄️  Using mock in-memory database (development mode)');
+  // Use mock database for development
+  
+  export interface Agent {
+    id: string;
+    name: string;
+    role: string;
+    status: 'active' | 'inactive';
+    createdAt: Date;
+  }
 
-export const agentCommunications = pgTable('agentCommunications', {
-  id: serial('id').primaryKey(),
-  agentId: text('agent_id').notNull(),
-  message: text('message').notNull(),
-  direction: text('direction').notNull(), // 'ceo_to_agent', 'agent_to_ceo'
-  timestamp: timestamp('timestamp').notNull(),
-});
+  export interface AgentCommunication {
+    id: string;
+    fromAgentId: string;
+    toAgentId: string;
+    message: string;
+    timestamp: Date;
+  }
 
-// --- Mock Data ---
-let MOCK_AGENTS = [
-    { id: 'cto_agent_001', name: 'Dr. Zade Sterling (CTO)', status: 'working', lastSeen: new Date() },
-    { id: 'pm_agent_001', name: 'Ms. Elara Vance (PM)', status: 'idle', lastSeen: new Date(Date.now() - 60000) },
-];
+  export interface AgentDecision {
+    id: string;
+    agentId: string;
+    decision: string;
+    status: 'pending' | 'approved' | 'rejected';
+    timestamp: Date;
+  }
 
-let MOCK_DECISIONS = [
-    { id: 'dec_001', agentId: 'cto_agent_001', description: 'Approve $50k budget for Q4 cloud infrastructure.', status: 'pending' },
-    { id: 'dec_002', agentId: 'pm_agent_001', description: 'Reject feature request for "AI-powered coffee maker".', status: 'pending' },
-];
+  export interface User {
+    id: string;
+    email: string;
+    name: string;
+    role: 'admin' | 'user';
+    createdAt: Date;
+  }
 
-let MOCK_MESSAGES = [
-    { id: 1, agentId: 'cto_agent_001', message: 'Please provide a 3-month scaling plan.', direction: 'ceo_to_agent', timestamp: new Date(Date.now() - 120000) },
-    { id: 2, agentId: 'cto_agent_001', message: 'Scaling plan submitted for review.', direction: 'agent_to_ceo', timestamp: new Date(Date.now() - 60000) },
-];
+  // Mock data storage
+  const agents: Agent[] = [];
+  const agentCommunications: AgentCommunication[] = [];
+  const agentDecisions: AgentDecision[] = [];
+  const users: User[] = [];
 
-// --- Mock DB Implementation ---
-export const db = {
-    // Select/Query operations
-    query: {
-        agents: {
-            findMany: () => Promise.resolve(MOCK_AGENTS),
-        },
-        agentDecisions: {
-            findMany: () => Promise.resolve(MOCK_DECISIONS),
-        },
-        agentCommunications: {
-            findMany: () => Promise.resolve(MOCK_MESSAGES),
-        },
+  export const db = {
+    agents: {
+      findMany: async () => agents,
+      create: async (agent: Omit<Agent, 'id' | 'createdAt'>) => {
+        const newAgent: Agent = {
+          ...agent,
+          id: `agent_${Date.now()}`,
+          createdAt: new Date(),
+        };
+        agents.push(newAgent);
+        return newAgent;
+      },
+      findById: async (id: string) => agents.find(a => a.id === id),
+      update: async (id: string, data: Partial<Agent>) => {
+        const index = agents.findIndex(a => a.id === id);
+        if (index === -1) return null;
+        agents[index] = { ...agents[index], ...data };
+        return agents[index];
+      },
+      delete: async (id: string) => {
+        const index = agents.findIndex(a => a.id === id);
+        if (index === -1) return false;
+        agents.splice(index, 1);
+        return true;
+      },
     },
-    // Insert operations
-    insert: {
-        agents: (newAgent: typeof MOCK_AGENTS[number]) => {
-            MOCK_AGENTS.push(newAgent);
-            return Promise.resolve([newAgent]);
-        },
-        agentCommunications: (newMessage: typeof MOCK_MESSAGES[number]) => {
-            MOCK_MESSAGES.push(newMessage);
-            return Promise.resolve([newMessage]);
-        },
+    agentCommunications: {
+      findMany: async () => agentCommunications,
+      create: async (comm: Omit<AgentCommunication, 'id' | 'timestamp'>) => {
+        const newComm: AgentCommunication = {
+          ...comm,
+          id: `comm_${Date.now()}`,
+          timestamp: new Date(),
+        };
+        agentCommunications.push(newComm);
+        return newComm;
+      },
+      findByAgentId: async (agentId: string) => 
+        agentCommunications.filter(c => c.fromAgentId === agentId || c.toAgentId === agentId),
     },
-    // Update operations
-    update: {
-        agentDecisions: (decisionId: string, status: string) => {
-            const decision = MOCK_DECISIONS.find(d => d.id === decisionId);
-            if (decision) {
-                decision.status = status;
-            }
-            MOCK_DECISIONS = MOCK_DECISIONS.filter(d => d.id !== decisionId || d.status === 'pending');
-            return Promise.resolve(decision);
-        }
-    }
-};
-
-// Export types
-export type Agent = typeof MOCK_AGENTS[number];
-export type Decision = typeof MOCK_DECISIONS[number];
-export type Communication = typeof MOCK_MESSAGES[number];
+    agentDecisions: {
+      findMany: async () => agentDecisions,
+      create: async (decision: Omit<AgentDecision, 'id' | 'timestamp'>) => {
+        const newDecision: AgentDecision = {
+          ...decision,
+          id: `decision_${Date.now()}`,
+          timestamp: new Date(),
+        };
+        agentDecisions.push(newDecision);
+        return newDecision;
+      },
+      findByAgentId: async (agentId: string) => 
+        agentDecisions.filter(d => d.agentId === agentId),
+      update: async (id: string, data: Partial<AgentDecision>) => {
+        const index = agentDecisions.findIndex(d => d.id === id);
+        if (index === -1) return null;
+        agentDecisions[index] = { ...agentDecisions[index], ...data };
+        return agentDecisions[index];
+      },
+    },
+    users: {
+      findMany: async () => users,
+      create: async (user: Omit<User, 'id' | 'createdAt'>) => {
+        const newUser: User = {
+          ...user,
+          id: `user_${Date.now()}`,
+          createdAt: new Date(),
+        };
+        users.push(newUser);
+        return newUser;
+      },
+    },
+  };
+}
