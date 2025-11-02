@@ -4,6 +4,7 @@ import { db } from './db-selector';
 import { nanoid } from 'nanoid';
 import { generateAgentRecommendation } from './lib/rag-system';
 import { initializeKnowledgeBase } from './lib/knowledge-loader';
+import { generateSpeech, AGENT_VOICES } from './lib/voice';
 
 const t = initTRPC.create();
 
@@ -101,6 +102,45 @@ const agentsRouter = router({
         return updated;
       }),
   }),
+
+  /**
+   * Generate speech for an agent's recommendation
+   */
+  speak: publicProcedure
+    .input(z.object({ 
+      agentId: z.string(),
+      text: z.string() 
+    }))
+    .mutation(async ({ input }) => {
+      console.log(`🎤 Generating speech for agent ${input.agentId}...`);
+      
+      try {
+        // Get agent to determine voice
+        const agent = await db.agents.findById(input.agentId);
+        if (!agent) {
+          throw new Error('Agent not found');
+        }
+        
+        // Get voice ID for agent role
+        const voiceId = AGENT_VOICES[agent.role as keyof typeof AGENT_VOICES] || AGENT_VOICES.CTO;
+        
+        // Generate speech
+        const audioBuffer = await generateSpeech(input.text, voiceId);
+        
+        // Convert to base64 for transmission
+        const audioBase64 = audioBuffer.toString('base64');
+        
+        console.log(`✅ Speech generated for ${agent.name}`);
+        
+        return {
+          audio: audioBase64,
+          format: 'mp3',
+        };
+      } catch (error) {
+        console.error('❌ Error generating speech:', error);
+        throw new Error(`Speech generation failed: ${error}`);
+      }
+    }),
 
   /**
    * Initialize an intelligent agent with RAG-powered recommendations
