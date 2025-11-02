@@ -80,6 +80,24 @@ const CEODashboard: React.FC = () => {
         },
     });
 
+    // 5. Speak Agent Recommendation Mutation
+    const speakMutation = trpc.agents.speak.useMutation({
+        onSuccess: (data) => {
+            // Convert base64 to audio and play
+            const audioBlob = new Blob(
+                [Uint8Array.from(atob(data.audio), c => c.charCodeAt(0))],
+                { type: 'audio/mpeg' }
+            );
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+            toast.success("Playing agent voice!");
+        },
+        onError: (error) => {
+            toast.error(`Failed to generate speech: ${error.message}`);
+        },
+    });
+
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto', background: 'rgba(255,255,255,0.95)', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.2)' }}>
@@ -115,8 +133,19 @@ const CEODashboard: React.FC = () => {
                         ) : (
                             <ul>
                                 {agents.map(agent => (
-                                    <li key={agent.id} onClick={() => setSelectedAgentId(agent.id)} style={{ cursor: 'pointer', fontWeight: agent.id === selectedAgentId ? 'bold' : 'normal' }}>
-                                        {agent.name} - Status: {agent.status} (Created: {new Date(agent.createdAt).toLocaleString()})
+                                    <li key={agent.id} onClick={() => setSelectedAgentId(agent.id)} style={{ cursor: 'pointer', fontWeight: agent.id === selectedAgentId ? 'bold' : 'normal', marginBottom: '10px' }}>
+                                        <div>{agent.name} - Status: {agent.status} (Created: {new Date(agent.createdAt).toLocaleString()})</div>
+                                        {agent.recommendation && (
+                                            <Button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    speakMutation.mutate({ agentId: agent.id, text: agent.recommendation });
+                                                }}
+                                                disabled={speakMutation.isPending}
+                                            >
+                                                {speakMutation.isPending ? "🎤 Speaking..." : "🔊 Speak Recommendation"}
+                                            </Button>
+                                        )}
                                     </li>
                                 ))}
                             </ul>
