@@ -7,7 +7,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 /**
- * CEO Command Center
+ * SIGMA Command Center
+ * Strategic Intelligence & Management Automation
  * Manage your AI leadership team and approve strategic decisions
  */
 export default function CEODashboard() {
@@ -75,8 +76,8 @@ export default function CEODashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">CEO Command Center</h1>
-          <p className="text-lg text-slate-600">Manage your AI leadership team and approve strategic decisions</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">SIGMA Command Center</h1>
+          <p className="text-lg text-slate-600">Strategic Intelligence & Management Automation</p>
         </div>
 
         {/* Tabs */}
