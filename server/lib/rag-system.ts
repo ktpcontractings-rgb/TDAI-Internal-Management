@@ -1,51 +1,33 @@
-import { invokeLLM } from "./llm";
-import { retrieveKnowledgeForRecommendation } from "./pinecone";
+import { retrieveKnowledgeForRecommendation } from "./neon-vector";
 import { getFallbackKnowledge } from "./knowledge-fallback";
+import OpenAI from "openai";
 
-/**
- * RAG System: Retrieval-Augmented Generation for Agent Reasoning
- * Enables agents to generate recommendations grounded in real-world case studies and best practices
- */
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export interface RecommendationRequest {
-  agent: "cto" | "pm" | "em" | "le" | "ceo";
+  agent: "cto" | "pm" | "ceo";
   topic: string;
   context: string;
   businessSituation: string;
 }
 
 export interface AgentRecommendation {
-  agent: string;
   title: string;
   summary: string;
-  recommendations: string[];
-  implementation: {
-    steps: string[];
-    timeline: string;
-    budget?: string;
-    risks: string[];
-  };
-  casesStudiesCited: string[];
-  confidence: number;
-  nextSteps: string[];
+  reasoning: string;
+  actionItems: string[];
+  references: string[];
 }
 
-/**
- * Generate agent recommendation using RAG
- * 1. Retrieve relevant knowledge from Pinecone
- * 2. Inject knowledge into LLM context
- * 3. Generate recommendation grounded in real-world examples
- */
 export async function generateAgentRecommendation(
   request: RecommendationRequest
 ): Promise<AgentRecommendation> {
   try {
-    console.log(`\n🤔 ${request.agent.toUpperCase()} Agent is thinking...`);
-    console.log(`Topic: ${request.topic}`);
-    console.log(`Context: ${request.context}`);
+    console.log(`🧠 Generating recommendation for ${request.agent}...`);
 
-    // Step 1: Retrieve relevant knowledge (with fallback if Pinecone unavailable)
-    console.log("\n📚 Retrieving relevant knowledge from knowledge base...");
+    // Try to retrieve knowledge from Neon vector database
     let knowledge;
     try {
       knowledge = await retrieveKnowledgeForRecommendation(
@@ -54,279 +36,80 @@ export async function generateAgentRecommendation(
         request.context
       );
     } catch (error) {
-      console.warn("⚠️ Pinecone unavailable, using fallback knowledge");
+      console.warn("⚠️  Vector search failed, using fallback knowledge");
       knowledge = getFallbackKnowledge(request.agent, request.topic, request.context);
     }
 
-    // Format knowledge for LLM context
-    const knowledgeContext = formatKnowledgeContext(knowledge);
+    // Build context from retrieved knowledge
+    const curriculumContext = knowledge.curriculum
+      .map((doc: any) => `- ${doc.metadata.title}: ${doc.metadata.content}`)
+      .join("\n");
 
-    // Step 2: Create agent-specific system prompt
-    const systemPrompt = getAgentSystemPrompt(request.agent);
+    const caseStudyContext = knowledge.caseStudies
+      .map((doc: any) => `- ${doc.metadata.company || doc.metadata.title}: ${doc.metadata.content}`)
+      .join("\n");
 
-    // Step 3: Create user prompt with business situation
+    const scenarioContext = knowledge.scenarios
+      .map((doc: any) => `- ${doc.metadata.title}: ${doc.metadata.content}`)
+      .join("\n");
+
+    // Generate recommendation using GPT-4
+    const systemPrompt = `You are a world-class ${request.agent.toUpperCase()} advisor. 
+You provide strategic recommendations based on industry best practices, case studies, and proven frameworks.
+Your recommendations are actionable, specific, and grounded in real-world examples.`;
+
     const userPrompt = `
-Business Situation:
-${request.businessSituation}
+Business Context: ${request.context}
+
+Current Situation: ${request.businessSituation}
 
 Topic: ${request.topic}
-Context: ${request.context}
 
-Please provide strategic recommendations based on your expertise and the case studies provided.
+Relevant Best Practices:
+${curriculumContext}
 
-Structure your response as JSON with the following fields:
+Relevant Case Studies:
+${caseStudyContext}
+
+Relevant Scenarios:
+${scenarioContext}
+
+Based on the above context, provide a strategic recommendation with:
+1. A clear, actionable title
+2. A brief summary (2-3 sentences)
+3. Detailed reasoning explaining why this recommendation is important
+4. 3-5 specific action items
+5. References to the case studies or best practices that support this recommendation
+
+Format your response as JSON with the following structure:
 {
-  "title": "Recommendation title",
-  "summary": "1-2 sentence summary",
-  "recommendations": ["recommendation 1", "recommendation 2", "recommendation 3"],
-  "implementation": {
-    "steps": ["step 1", "step 2", "step 3"],
-    "timeline": "timeline estimate",
-    "budget": "budget estimate if applicable",
-    "risks": ["risk 1", "risk 2"]
-  },
-  "caseStudiesCited": ["case study 1", "case study 2"],
-  "confidence": 0.95,
-  "nextSteps": ["next step 1", "next step 2"]
+  "title": "string",
+  "summary": "string",
+  "reasoning": "string",
+  "actionItems": ["string"],
+  "references": ["string"]
 }
 `;
 
-    // Step 4: Call LLM with augmented context
-    console.log("\n🧠 Generating recommendation with LLM...");
-    const fullUserPrompt = `${knowledgeContext}\n\n${userPrompt}`;
-    const response = await invokeLLM({
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
       messages: [
         { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: fullUserPrompt,
-        },
+        { role: "user", content: userPrompt },
       ],
+      temperature: 0.7,
+      response_format: { type: "json_object" },
     });
 
-    // Step 5: Parse and validate response
-    const messageContent = response.choices[0].message.content;
-    const responseText = typeof messageContent === 'string' ? messageContent : "{}";
-    const recommendationData = JSON.parse(responseText);
+    const recommendation = JSON.parse(
+      response.choices[0].message.content || "{}"
+    );
 
-    const recommendation: AgentRecommendation = {
-      agent: request.agent,
-      title: recommendationData.title || "Strategic Recommendation",
-      summary: recommendationData.summary || "",
-      recommendations: Array.isArray(recommendationData.recommendations)
-        ? recommendationData.recommendations
-        : [],
-      implementation: {
-        steps: Array.isArray(recommendationData.implementation?.steps)
-          ? recommendationData.implementation.steps
-          : [],
-        timeline: recommendationData.implementation?.timeline || "",
-        budget: recommendationData.implementation?.budget,
-        risks: Array.isArray(recommendationData.implementation?.risks)
-          ? recommendationData.implementation.risks
-          : [],
-      },
-      casesStudiesCited: Array.isArray(recommendationData.caseStudiesCited)
-        ? recommendationData.caseStudiesCited
-        : [],
-      confidence: typeof recommendationData.confidence === 'number'
-        ? recommendationData.confidence
-        : 0.8,
-      nextSteps: Array.isArray(recommendationData.nextSteps)
-        ? recommendationData.nextSteps
-        : [],
-    };
+    console.log(`✅ Recommendation generated: ${recommendation.title}`);
 
-    console.log(`\n✅ Recommendation generated by ${request.agent} agent`);
     return recommendation;
   } catch (error) {
-    console.error("Error generating recommendation:", error);
+    console.error("❌ Error generating recommendation:", error);
     throw error;
   }
 }
-
-/**
- * Format knowledge context for LLM injection
- */
-function formatKnowledgeContext(knowledge: any): string {
-  let context = "## Relevant Knowledge Base\n\n";
-
-  if (knowledge.curriculum && knowledge.curriculum.length > 0) {
-    context += "### Curriculum\n";
-    knowledge.curriculum.forEach((doc: any) => {
-      context += `- **${doc.metadata?.title || "Unknown"}**: ${doc.metadata?.content?.substring(0, 200)}...\n`;
-    });
-    context += "\n";
-  }
-
-  if (knowledge.caseStudies && knowledge.caseStudies.length > 0) {
-    context += "### Case Studies\n";
-    knowledge.caseStudies.forEach((doc: any) => {
-      context += `- **${doc.metadata?.company || "Unknown"}**: ${doc.metadata?.content?.substring(0, 200)}...\n`;
-    });
-    context += "\n";
-  }
-
-  if (knowledge.scenarios && knowledge.scenarios.length > 0) {
-    context += "### Relevant Scenarios\n";
-    knowledge.scenarios.forEach((doc: any) => {
-      context += `- **${doc.metadata?.title || "Unknown"}**: ${doc.metadata?.content?.substring(0, 200)}...\n`;
-    });
-    context += "\n";
-  }
-
-  return context;
-}
-
-/**
- * Get agent-specific system prompt
- */
-function getAgentSystemPrompt(agent: string): string {
-  const prompts: Record<string, string> = {
-    cto: `You are Dr. Zade Sterling, Chief Technology Officer of Teddy Dangers Incorporated (TDAI).
-
-You are a world-class CTO with expertise in:
-- System design and architecture patterns
-- Distributed systems and consensus algorithms
-- Cloud architecture and infrastructure
-- Database design and optimization
-- Security and cryptography
-- DevOps and infrastructure as code
-- AI/ML systems and LLM architecture
-
-Your role is to provide strategic technical recommendations based on:
-1. Real-world case studies from Netflix, Stripe, Uber, and other tech leaders
-2. Your Master's-level knowledge in software architecture
-3. TDAI's specific situation as a legal tech startup
-
-When providing recommendations:
-- Ground recommendations in real-world case studies
-- Explain trade-offs and risks
-- Provide step-by-step implementation plans
-- Consider TDAI's budget and timeline constraints
-- Focus on reliability, scalability, and security
-
-You are NOT a marketer, salesperson, or HR manager. Stay focused on technical excellence.`,
-
-    pm: `You are Maya Singh, Product Manager of Teddy Dangers Incorporated (TDAI).
-
-You are a world-class PM with expertise in:
-- Product strategy and vision
-- Customer research and discovery
-- Product-market fit and validation
-- Product roadmap and prioritization
-- Pricing strategy and business models
-- Go-to-market strategy
-- B2B SaaS and legal tech markets
-
-Your role is to provide strategic product recommendations based on:
-1. Real-world case studies from Slack, Figma, and other product leaders
-2. Your Master's-level knowledge in product management
-3. TDAI's specific situation as a legal tech startup in Michigan
-
-When providing recommendations:
-- Ground recommendations in customer research and market analysis
-- Explain customer benefits and market opportunity
-- Provide step-by-step go-to-market plans
-- Consider TDAI's budget and timeline constraints
-- Focus on achieving product-market fit and revenue growth
-
-You are NOT an engineer, accountant, or HR manager. Stay focused on customer and product excellence.`,
-
-    em: `You are Ben Carter, Engineering Manager of Teddy Dangers Incorporated (TDAI).
-
-You are a world-class engineering manager with expertise in:
-- Building and scaling high-performing teams
-- Hiring and onboarding engineers
-- Performance management and feedback
-- Engineering practices and processes
-- Technical decision making
-- Team culture and psychological safety
-
-Your role is to provide strategic recommendations on team building and execution based on:
-1. Best practices from leading tech companies
-2. Your Master's-level knowledge in team leadership
-3. TDAI's specific situation as a growing startup
-
-When providing recommendations:
-- Focus on building high-performing teams
-- Provide hiring and onboarding strategies
-- Explain engineering practices and processes
-- Consider TDAI's budget and growth constraints
-- Balance team growth with code quality and culture
-
-You are NOT a product manager, CEO, or HR manager. Stay focused on engineering excellence and team success.`,
-
-    le: `You are Alex Chen, Lead Engineer of Teddy Dangers Incorporated (TDAI).
-
-You are a world-class engineer with expertise in:
-- System design and architecture patterns
-- Code quality and best practices
-- Design patterns and principles (SOLID, DRY, KISS)
-- Testing strategies and quality assurance
-- Performance optimization
-- Security best practices
-
-Your role is to provide technical recommendations on code quality and system design based on:
-1. Best practices from leading tech companies
-2. Your Master's-level knowledge in software engineering
-3. TDAI's specific situation as a growing startup
-
-When providing recommendations:
-- Focus on code quality and maintainability
-- Provide design pattern recommendations
-- Explain testing and quality strategies
-- Consider TDAI's timeline and resource constraints
-- Balance technical excellence with pragmatism
-
-You are NOT a manager, product manager, or CEO. Stay focused on technical excellence and code quality.`,
-
-    ceo: `You are Dr. Evelyn "Evie" Reed, Chief Executive Officer of Teddy Dangers Incorporated (TDAI).
-
-You are a world-class CEO with expertise in:
-- Strategic vision and company direction
-- Fundraising and investor relations
-- Financial management and planning
-- Organizational scaling
-- Board management and governance
-- Market opportunity assessment
-
-Your role is to provide strategic recommendations on company direction based on:
-1. Best practices from successful startup founders
-2. Your Master's-level knowledge in CEO leadership
-3. TDAI's specific situation as a pre-seed startup with unicorn ambitions
-
-When providing recommendations:
-- Focus on strategic vision and company direction
-- Provide fundraising and growth strategies
-- Explain financial planning and unit economics
-- Consider market opportunity and competitive positioning
-- Balance growth with sustainability and profitability
-
-You are NOT an engineer, product manager, or HR manager. Stay focused on strategic leadership and company success.`,
-  };
-
-  return prompts[agent] || prompts.cto;
-}
-
-/**
- * Generate multiple recommendation options for comparison
- */
-export async function generateMultipleRecommendations(
-  request: RecommendationRequest,
-  optionCount: number = 3
-): Promise<AgentRecommendation[]> {
-  const recommendations: AgentRecommendation[] = [];
-
-  for (let i = 0; i < optionCount; i++) {
-    try {
-      const recommendation = await generateAgentRecommendation(request);
-      recommendations.push(recommendation);
-    } catch (error) {
-      console.error(`Error generating recommendation ${i + 1}:`, error);
-    }
-  }
-
-  return recommendations;
-}
-

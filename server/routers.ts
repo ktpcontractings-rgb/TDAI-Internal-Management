@@ -11,10 +11,8 @@ const t = initTRPC.create();
 const publicProcedure = t.procedure;
 const router = t.router;
 
-// Track if knowledge base has been initialized
 let knowledgeBaseInitialized = false;
 
-// Agent personas
 const AGENT_PERSONAS = {
   CTO: {
     name: "Dr. Zade Sterling",
@@ -48,7 +46,6 @@ const AGENT_PERSONAS = {
   },
 };
 
-// --- AGENTS ROUTER ---
 const agentsRouter = router({
   list: publicProcedure.query(async () => {
     const allAgents = await db.agents.findMany();
@@ -103,9 +100,6 @@ const agentsRouter = router({
       }),
   }),
 
-  /**
-   * Generate speech for an agent's recommendation
-   */
   speak: publicProcedure
     .input(z.object({ 
       agentId: z.string(),
@@ -115,19 +109,13 @@ const agentsRouter = router({
       console.log(`🎤 Generating speech for agent ${input.agentId}...`);
       
       try {
-        // Get agent to determine voice
         const agent = await db.agents.findById(input.agentId);
         if (!agent) {
           throw new Error('Agent not found');
         }
         
-        // Get voice ID for agent role
         const voiceId = AGENT_VOICES[agent.role as keyof typeof AGENT_VOICES] || AGENT_VOICES.CTO;
-        
-        // Generate speech
         const audioBuffer = await generateSpeech(input.text, voiceId);
-        
-        // Convert to base64 for transmission
         const audioBase64 = audioBuffer.toString('base64');
         
         console.log(`✅ Speech generated for ${agent.name}`);
@@ -142,15 +130,11 @@ const agentsRouter = router({
       }
     }),
 
-  /**
-   * Initialize an intelligent agent with RAG-powered recommendations
-   */
   initialize: publicProcedure
     .input(z.object({ role: z.enum(['PM', 'CTO', 'CEO', 'CFO', 'GC']) }))
     .mutation(async ({ input }) => {
       console.log(`\n🚀 Initializing ${input.role} Agent...`);
 
-      // Initialize knowledge base on first agent creation
       if (!knowledgeBaseInitialized) {
         try {
           console.log("📚 Initializing knowledge base (first time)...");
@@ -159,11 +143,9 @@ const agentsRouter = router({
           console.log("✅ Knowledge base initialized!");
         } catch (error) {
           console.error("⚠️  Knowledge base initialization failed (will continue with agent creation):", error);
-          // Continue anyway - agent can still be created without knowledge base
         }
       }
 
-      // Get agent persona
       const persona = AGENT_PERSONAS[input.role];
 
       // Create agent in database
@@ -175,7 +157,6 @@ const agentsRouter = router({
 
       console.log(`✅ Created agent: ${persona.name} (${agent.id})`);
 
-      // Generate initial strategic recommendation using RAG
       let recommendation = null;
       let decision = null;
 
@@ -193,6 +174,11 @@ const agentsRouter = router({
 
         console.log(`✅ Recommendation generated: ${recommendation.title}`);
 
+        // Store recommendation in agent record
+        await db.agents.update(agent.id, {
+          recommendation: recommendation,
+        });
+
         // Create decision for CEO approval
         decision = await db.agentDecisions.create({
           agentId: agent.id,
@@ -203,7 +189,6 @@ const agentsRouter = router({
         console.log(`✅ Decision created for approval`);
       } catch (error) {
         console.error(`⚠️  Failed to generate recommendation:`, error);
-        // Create fallback decision
         decision = await db.agentDecisions.create({
           agentId: agent.id,
           decision: `Initialize ${persona.name} as ${persona.title}`,
@@ -213,17 +198,17 @@ const agentsRouter = router({
 
       console.log(`\n🎉 ${persona.name} initialized successfully!\n`);
 
+      // Return agent with recommendation
+      const updatedAgent = await db.agents.findById(agent.id);
+
       return {
-        agent,
+        agent: updatedAgent,
         decision,
         recommendation,
       };
     }),
 });
 
-/**
- * Get initial topic for agent's first recommendation
- */
 function getInitialTopic(role: string): string {
   const topics: Record<string, string> = {
     CTO: "System architecture and technology stack for legal tech platform",
@@ -235,9 +220,6 @@ function getInitialTopic(role: string): string {
   return topics[role] || "Strategic recommendation";
 }
 
-/**
- * Get business situation context for agent
- */
 function getBusinessSituation(role: string): string {
   const situations: Record<string, string> = {
     CTO: `TDAI is building an AI-powered legal management platform. We need to decide on our technology stack, system architecture, and infrastructure approach. We're a pre-seed startup with limited resources but ambitious goals to serve law firms and corporate legal departments. We need recommendations on:
@@ -279,7 +261,6 @@ function getBusinessSituation(role: string): string {
   return situations[role] || "Provide strategic recommendations for TDAI's growth";
 }
 
-// --- MAIN ROUTER ---
 export const appRouter = router({
   agents: agentsRouter,
 });

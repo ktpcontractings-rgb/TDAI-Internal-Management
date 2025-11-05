@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { trpc } from '../lib/trpc';
 import { toast } from 'sonner';
 
-// --- Mock Components (Simplified) ---
 const Button = ({ children, onClick, disabled = false }: { children: React.ReactNode, onClick: () => void, disabled?: boolean }) => (
     <button onClick={onClick} disabled={disabled} style={{ padding: '8px', margin: '4px', border: '1px solid gray', cursor: disabled ? 'not-allowed' : 'pointer' }}>
         {children}
@@ -21,69 +20,62 @@ const Card = ({ title, children }: { title: string, children: React.ReactNode })
 );
 
 const CEODashboard: React.FC = () => {
-    // State for inputs and selected agent
     const [message, setMessage] = useState('');
-    const [selectedAgentId, setSelectedAgentId] = useState('cto_agent_001'); // Start with a default agent ID
+    const [selectedAgentId, setSelectedAgentId] = useState('cto_agent_001');
+    const [expandedRecommendation, setExpandedRecommendation] = useState<string | null>(null);
 
-    // --- Data Loading (tRPC Queries) ---
     const { data: agents = [], isLoading: isLoadingAgents } = trpc.agents.list.useQuery();
     const { data: pendingDecisions = [], isLoading: isLoadingDecisions } = trpc.agents.decisions.list.useQuery({ agentId: selectedAgentId }, { enabled: !!selectedAgentId });
     const { data: messages = [], isLoading: isLoadingMessages } = trpc.agents.communications.list.useQuery({ agentId: selectedAgentId }, { enabled: !!selectedAgentId });
 
-    // Helper to get the tRPC context for invalidation
     const trpcUtils = trpc.useUtils();
 
-    // --- Mutations (tRPC) ---
-
-    // 1. Initialize Agent Mutation
     const initializeAgentMutation = trpc.agents.initialize.useMutation({
         onSuccess: (data) => {
             toast.success(`${data.agent.name} initialized successfully!`);
-            trpcUtils.agents.list.invalidate(); // Refresh agent list
+            if (data.recommendation) {
+                toast.info(`Recommendation: ${data.recommendation.title}`);
+            }
+            trpcUtils.agents.list.invalidate();
         },
         onError: (error) => {
             toast.error(`Failed to initialize agent: ${error.message}`);
         },
     });
 
-    // 2. Approve Decision Mutation
     const approveDecisionMutation = trpc.agents.decisions.approve.useMutation({
         onSuccess: () => {
             toast.success("Decision approved successfully!");
-            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId }); // Refresh decisions list
+            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId });
         },
         onError: (error) => {
             toast.error(`Failed to approve decision: ${error.message}`);
         },
     });
 
-    // 3. Reject Decision Mutation
     const rejectDecisionMutation = trpc.agents.decisions.reject.useMutation({
         onSuccess: () => {
             toast.success("Decision rejected successfully!");
-            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId }); // Refresh decisions list
+            trpcUtils.agents.decisions.list.invalidate({ agentId: selectedAgentId });
         },
         onError: (error) => {
             toast.error(`Failed to reject decision: ${error.message}`);
         },
     });
 
-    // 4. Send Message Mutation
     const sendMessageMutation = trpc.agents.communications.send.useMutation({
         onSuccess: () => {
             toast.success("Message sent successfully!");
-            setMessage(''); // Clear message input
-            trpcUtils.agents.communications.list.invalidate({ agentId: selectedAgentId }); // Refresh messages
+            setMessage('');
+            trpcUtils.agents.communications.list.invalidate({ agentId: selectedAgentId });
         },
         onError: (error) => {
             toast.error(`Failed to send message: ${error.message}`);
         },
     });
 
-    // 5. Speak Agent Recommendation Mutation
     const speakMutation = trpc.agents.speak.useMutation({
         onSuccess: (data) => {
-            // Convert base64 to audio and play
             const audioBlob = new Blob(
                 [Uint8Array.from(atob(data.audio), c => c.charCodeAt(0))],
                 { type: 'audio/mpeg' }
@@ -100,7 +92,7 @@ const CEODashboard: React.FC = () => {
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto', background: 'rgba(255,255,255,0.95)', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.2)' }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto', background: 'rgba(255,255,255,0.95)', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.2)' }}>
                 <h1 style={{ fontSize: '48px', fontWeight: 'bold', color: '#333', marginBottom: '10px', textAlign: 'center' }}>
                     SIGMA Command Center
                 </h1>
@@ -124,31 +116,95 @@ const CEODashboard: React.FC = () => {
                         >
                             {initializeAgentMutation.isPending ? "Initializing CTO..." : "Initialize CTO Agent"}
                         </Button>
+                        <Button
+                            onClick={() => initializeAgentMutation.mutate({ role: 'CEO' })}
+                            disabled={initializeAgentMutation.isPending}
+                        >
+                            {initializeAgentMutation.isPending ? "Initializing CEO..." : "Initialize CEO Agent"}
+                        </Button>
                         <hr />
-                        <h4>Agent Status</h4>
+                        <h4>Agent Status & Recommendations</h4>
                         {isLoadingAgents ? (
                             <div>Loading agents...</div>
                         ) : agents.length === 0 ? (
                             <div>No agents initialized yet. Click a button above to start!</div>
                         ) : (
-                            <ul>
+                            <div>
                                 {agents.map(agent => (
-                                    <li key={agent.id} onClick={() => setSelectedAgentId(agent.id)} style={{ cursor: 'pointer', fontWeight: agent.id === selectedAgentId ? 'bold' : 'normal', marginBottom: '10px' }}>
-                                        <div>{agent.name} - Status: {agent.status} (Created: {new Date(agent.createdAt).toLocaleString()})</div>
+                                    <div key={agent.id} style={{ 
+                                        border: '1px solid #ddd', 
+                                        padding: '12px', 
+                                        marginBottom: '12px', 
+                                        borderRadius: '8px',
+                                        background: agent.id === selectedAgentId ? '#f0f0ff' : '#fff'
+                                    }}>
+                                        <div 
+                                            onClick={() => setSelectedAgentId(agent.id)} 
+                                            style={{ cursor: 'pointer', fontWeight: agent.id === selectedAgentId ? 'bold' : 'normal' }}
+                                        >
+                                            <div style={{ fontSize: '16px', marginBottom: '4px' }}>
+                                                {agent.name} - {agent.status}
+                                            </div>
+                                            <div style={{ fontSize: '12px', color: '#666' }}>
+                                                Created: {new Date(agent.createdAt).toLocaleString()}
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Display Recommendation */}
                                         {agent.recommendation && (
-                                            <Button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    speakMutation.mutate({ agentId: agent.id, text: agent.recommendation });
-                                                }}
-                                                disabled={speakMutation.isPending}
-                                            >
-                                                {speakMutation.isPending ? "🎤 Speaking..." : "🔊 Speak Recommendation"}
-                                            </Button>
+                                            <div style={{ marginTop: '12px', padding: '12px', background: '#f9f9f9', borderRadius: '6px', border: '1px solid #e0e0e0' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <strong style={{ color: '#667eea' }}>💡 Recommendation</strong>
+                                                    <Button onClick={() => setExpandedRecommendation(expandedRecommendation === agent.id ? null : agent.id)}>
+                                                        {expandedRecommendation === agent.id ? 'Hide' : 'Show'}
+                                                    </Button>
+                                                </div>
+                                                
+                                                {expandedRecommendation === agent.id && typeof agent.recommendation === 'object' && (
+                                                    <div style={{ marginTop: '12px' }}>
+                                                        <h4 style={{ margin: '8px 0', color: '#333' }}>{agent.recommendation.title}</h4>
+                                                        <p style={{ margin: '8px 0', fontSize: '14px' }}><strong>Summary:</strong> {agent.recommendation.summary}</p>
+                                                        <p style={{ margin: '8px 0', fontSize: '14px' }}><strong>Reasoning:</strong> {agent.recommendation.reasoning}</p>
+                                                        
+                                                        {agent.recommendation.actionItems && agent.recommendation.actionItems.length > 0 && (
+                                                            <div style={{ margin: '8px 0' }}>
+                                                                <strong style={{ fontSize: '14px' }}>Action Items:</strong>
+                                                                <ul style={{ margin: '4px 0', paddingLeft: '20px' }}>
+                                                                    {agent.recommendation.actionItems.map((item: string, idx: number) => (
+                                                                        <li key={idx} style={{ fontSize: '13px', margin: '4px 0' }}>{item}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                        
+                                                        {agent.recommendation.references && agent.recommendation.references.length > 0 && (
+                                                            <div style={{ margin: '8px 0' }}>
+                                                                <strong style={{ fontSize: '14px' }}>References:</strong>
+                                                                <ul style={{ margin: '4px 0', paddingLeft: '20px' }}>
+                                                                    {agent.recommendation.references.map((ref: string, idx: number) => (
+                                                                        <li key={idx} style={{ fontSize: '13px', margin: '4px 0' }}>{ref}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                        
+                                                        <Button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const text = `${agent.recommendation.title}. ${agent.recommendation.summary}`;
+                                                                speakMutation.mutate({ agentId: agent.id, text });
+                                                            }}
+                                                            disabled={speakMutation.isPending}
+                                                        >
+                                                            {speakMutation.isPending ? "🎤 Speaking..." : "🔊 Speak"}
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         )}
-                                    </li>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         )}
                     </Card>
 

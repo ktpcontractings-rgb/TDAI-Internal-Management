@@ -1,230 +1,111 @@
-import { uploadKnowledgeDocument } from "./pinecone";
-import type { KnowledgeDocument } from "./pinecone";
+import { uploadKnowledgeDocument, initializeVectorDB, type KnowledgeDocument } from "./neon-vector";
+import { nanoid } from "nanoid";
 
-/**
- * Initialize Knowledge Base
- * Loads management team knowledge into Pinecone
- * This runs once when the server starts (or on demand)
- */
+// Sample knowledge base for each agent
+const knowledgeBase: KnowledgeDocument[] = [
+  // CTO Knowledge
+  {
+    id: nanoid(),
+    type: "curriculum",
+    agent: "cto",
+    title: "System Architecture Best Practices",
+    content: "Focus on scalability, reliability, and security. Use microservices for modularity, implement proper caching strategies, and ensure robust error handling. Consider cloud-native architectures for flexibility. Choose proven technologies that match team expertise.",
+    metadata: {
+      course: "System Design",
+      tags: ["architecture", "scalability", "best-practices"],
+    },
+  },
+  {
+    id: nanoid(),
+    type: "case_study",
+    agent: "cto",
+    title: "Netflix Microservices Migration",
+    content: "Netflix scaled from monolith to microservices, implemented chaos engineering, and built a resilient cloud-native architecture. Key lessons: gradual migration, strong observability, and culture of reliability.",
+    metadata: {
+      company: "Netflix",
+      industry: "Streaming",
+      tags: ["microservices", "migration", "case-study"],
+    },
+  },
+  {
+    id: nanoid(),
+    type: "case_study",
+    agent: "cto",
+    title: "Stripe API-First Architecture",
+    content: "Stripe prioritized API design, developer experience, and reliability. They built robust payment infrastructure with strong consistency guarantees and comprehensive testing. Key lessons: API-first design, extensive documentation, and reliability as a feature.",
+    metadata: {
+      company: "Stripe",
+      industry: "Payments",
+      tags: ["api-design", "reliability", "case-study"],
+    },
+  },
+  
+  // PM Knowledge
+  {
+    id: nanoid(),
+    type: "curriculum",
+    agent: "pm",
+    title: "Product Strategy & Vision",
+    content: "Define clear product vision aligned with market needs. Focus on solving real customer problems. Use data-driven decision making combined with customer empathy. Prioritize ruthlessly based on impact and effort.",
+    metadata: {
+      course: "Product Management",
+      tags: ["strategy", "vision", "prioritization"],
+    },
+  },
+  {
+    id: nanoid(),
+    type: "case_study",
+    agent: "pm",
+    title: "Slack Product-Market Fit Journey",
+    content: "Slack achieved product-market fit by focusing on team communication pain points, building viral growth loops, and obsessing over user experience. Key lessons: solve a real problem, make it delightful, and enable word-of-mouth growth.",
+    metadata: {
+      company: "Slack",
+      industry: "Collaboration",
+      tags: ["pmf", "viral-growth", "case-study"],
+    },
+  },
+  
+  // CEO Knowledge
+  {
+    id: nanoid(),
+    type: "curriculum",
+    agent: "ceo",
+    title: "Strategic Vision & Leadership",
+    content: "Set clear company vision and mission. Build strong culture and values. Focus on hiring exceptional talent. Communicate transparently with team and stakeholders. Balance growth with sustainability.",
+    metadata: {
+      course: "Leadership",
+      tags: ["vision", "leadership", "culture"],
+    },
+  },
+  {
+    id: nanoid(),
+    type: "case_study",
+    agent: "ceo",
+    title: "Airbnb Resilience Story",
+    content: "Airbnb survived near-death experiences by focusing on quality over quantity, building trust and safety, and creating magical user experiences. Key lessons: resilience, focus on core value proposition, and build community.",
+    metadata: {
+      company: "Airbnb",
+      industry: "Hospitality",
+      tags: ["resilience", "crisis-management", "case-study"],
+    },
+  },
+];
 
 export async function initializeKnowledgeBase() {
-  console.log("🚀 Initializing TDAI Management Knowledge Base...");
-
-  const allDocuments: KnowledgeDocument[] = [
-    // CTO Knowledge
-    {
-      id: "cto-case-netflix",
-      type: "case_study",
-      agent: "cto",
-      title: "Netflix: Monolith to Microservices Transformation",
-      content: `Netflix transformed from a monolithic architecture to microservices to scale to 270M+ users globally.
-      
-Initial Challenge:
-- Monolithic Java application couldn't scale
-- Single points of failure
-- Slow deployment cycles
-- Limited innovation velocity
-
-Solution Implemented:
-- Migrated to microservices on AWS
-- Service boundaries based on business domains
-- Independent deployment and scaling per service
-- Implemented resilience patterns (circuit breakers, timeouts, bulkheads)
-- Built comprehensive observability and monitoring
-
-Key Technologies:
-- AWS cloud infrastructure
-- Docker containers and Kubernetes
-- Cassandra for distributed data
-- Kafka for event streaming
-- Zuul API gateway
-
-Results Achieved:
-- 99.99% uptime SLA
-- 270M+ users worldwide
-- 5000+ microservices in production
-- Deployment frequency: multiple times per day
-- Reduced time-to-market for new features
-
-Lessons Learned:
-- Start with clear service boundaries
-- Invest heavily in observability from day one
-- Build resilience into every service
-- Automate everything (testing, deployment, monitoring)
-- Culture change is as important as technical change`,
-      metadata: {
-        company: "Netflix",
-        industry: "streaming",
-        tags: ["microservices", "scaling", "aws", "architecture"],
-      },
-    },
-    {
-      id: "cto-case-stripe",
-      type: "case_study",
-      agent: "cto",
-      title: "Stripe: Building Payment Infrastructure at Scale",
-      content: `Stripe built payment infrastructure processing billions in payments with strict reliability requirements.
-
-Challenge:
-- Process billions in payments reliably
-- Handle 5M+ queries per second
-- Operate in 70+ countries with different regulations
-- Maintain 99.99%+ uptime
-
-Architecture Decisions:
-- Distributed systems with strict consistency
-- Real-time transaction processing
-- Database sharding for horizontal scale
-- Idempotency for reliability
-- Global infrastructure deployment
-
-Key Technologies:
-- Ruby on Rails (API layer)
-- Scala (core payment processing)
-- MongoDB and PostgreSQL (data storage)
-- Redis (caching and queuing)
-- Custom distributed systems
-
-Results:
-- Processing billions in payments annually
-- 5M+ API requests per second
-- 99.999% uptime
-- Sub-second response times globally
-- Trusted by millions of businesses
-
-Lessons Learned:
-- Reliability over speed in financial systems
-- Idempotent operations are critical
-- Think globally from day one
-- Invest in developer experience (great APIs)
-- Monitoring and alerting are non-negotiable`,
-      metadata: {
-        company: "Stripe",
-        industry: "fintech",
-        tags: ["payments", "distributed-systems", "reliability", "scale"],
-      },
-    },
-
-    // PM Knowledge
-    {
-      id: "pm-case-slack",
-      type: "case_study",
-      agent: "pm",
-      title: "Slack: Achieving Product-Market Fit in 8 Months",
-      content: `Slack achieved product-market fit in just 8 months and reached unicorn status in record time.
-
-Origin Story:
-- Started as internal tool at Tiny Speck (gaming company)
-- Realized the tool was more valuable than the game
-- Pivoted to focus on team communication
-
-Product Strategy:
-- Solved a real pain point (fragmented team communication)
-- Superior UX compared to email and existing tools
-- Freemium model for viral growth
-- Focus on delighting users, not just features
-
-Go-to-Market Approach:
-- Beta launch with select companies
-- Word-of-mouth and community building
-- Strong focus on customer feedback
-- Rapid iteration based on user needs
-
-Key Metrics:
-- 8 months to product-market fit
-- 750K+ daily active users by 2015
-- $1B valuation in 2 years
-- 77% of Fortune 100 companies using Slack
-
-Results:
-- Fastest growing B2B SaaS company ever
-- $27.7B acquisition by Salesforce (2021)
-- Became verb ("let's Slack about it")
-
-Lessons Learned:
-- Focus on user experience above all
-- Build community, not just product
-- Iterate fast based on feedback
-- Freemium can drive explosive growth
-- Product-market fit feels like magic when you have it`,
-      metadata: {
-        company: "Slack",
-        industry: "saas",
-        tags: ["product-market-fit", "growth", "ux", "b2b"],
-      },
-    },
-    {
-      id: "pm-case-figma",
-      type: "case_study",
-      agent: "pm",
-      title: "Figma: Disrupting Adobe with Browser-Based Design",
-      content: `Figma disrupted the design tool market dominated by Adobe by building a browser-based collaborative tool.
-
-Market Opportunity:
-- Adobe dominated with desktop tools (Photoshop, Illustrator)
-- Designers struggled with collaboration and version control
-- Cloud-based tools were emerging (Google Docs success)
-
-Product Innovation:
-- Browser-based (no installation required)
-- Real-time collaboration (like Google Docs for design)
-- Cloud-based, accessible anywhere
-- Strong API and plugin ecosystem
-- Freemium pricing model
-
-Competitive Advantages:
-- Collaboration as core feature (not add-on)
-- Web technology stack (accessible, fast updates)
-- Designer-friendly pricing
-- Strong community and education
-
-Results:
-- 77% market share among design tools
-- Used by Google, Microsoft, Uber, Airbnb
-- $20B acquisition by Adobe (2022)
-- Fastest growing design tool ever
-
-Lessons Learned:
-- Identify pain points in incumbent solutions
-- Leverage new technology (web vs desktop)
-- Build community through education
-- Collaboration is a powerful differentiator
-- Freemium can win against expensive incumbents`,
-      metadata: {
-        company: "Figma",
-        industry: "design-tools",
-        tags: ["disruption", "collaboration", "saas", "product-strategy"],
-      },
-    },
-  ];
-
-  console.log(`📚 Loading ${allDocuments.length} knowledge documents...`);
-
-  let successCount = 0;
-  let errorCount = 0;
-
-  for (const doc of allDocuments) {
-    try {
+  try {
+    console.log("📚 Initializing knowledge base...");
+    
+    // Initialize vector database
+    await initializeVectorDB();
+    
+    // Upload all knowledge documents
+    for (const doc of knowledgeBase) {
       await uploadKnowledgeDocument(doc);
-      successCount++;
-      console.log(`✅ Loaded: ${doc.title}`);
-    } catch (error) {
-      errorCount++;
-      console.error(`❌ Failed to load: ${doc.title}`, error);
     }
+    
+    console.log(`✅ Knowledge base initialized with ${knowledgeBase.length} documents`);
+  } catch (error) {
+    console.error("❌ Error initializing knowledge base:", error);
+    throw error;
   }
-
-  console.log(`\n✅ Knowledge base initialization complete!`);
-  console.log(`   Success: ${successCount} documents`);
-  console.log(`   Errors: ${errorCount} documents`);
-
-  return {
-    success: errorCount === 0,
-    documentsLoaded: successCount,
-    errors: errorCount,
-  };
 }
-
-export default {
-  initializeKnowledgeBase,
-};
