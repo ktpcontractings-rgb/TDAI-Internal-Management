@@ -1,5 +1,6 @@
 import { invokeLLM } from "./llm";
 import { retrieveKnowledgeForRecommendation } from "./pinecone";
+import { getFallbackKnowledge } from "./knowledge-fallback";
 
 /**
  * RAG System: Retrieval-Augmented Generation for Agent Reasoning
@@ -43,13 +44,19 @@ export async function generateAgentRecommendation(
     console.log(`Topic: ${request.topic}`);
     console.log(`Context: ${request.context}`);
 
-    // Step 1: Retrieve relevant knowledge from Pinecone
+    // Step 1: Retrieve relevant knowledge (with fallback if Pinecone unavailable)
     console.log("\n📚 Retrieving relevant knowledge from knowledge base...");
-    const knowledge = await retrieveKnowledgeForRecommendation(
-      request.agent,
-      request.topic,
-      request.context
-    );
+    let knowledge;
+    try {
+      knowledge = await retrieveKnowledgeForRecommendation(
+        request.agent,
+        request.topic,
+        request.context
+      );
+    } catch (error) {
+      console.warn("⚠️ Pinecone unavailable, using fallback knowledge");
+      knowledge = getFallbackKnowledge(request.agent, request.topic, request.context);
+    }
 
     // Format knowledge for LLM context
     const knowledgeContext = formatKnowledgeContext(knowledge);
