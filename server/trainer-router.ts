@@ -97,8 +97,8 @@ export const trainerRouter = router({
     get: publicProcedure
       .input(z.object({ agentId: z.string() }))
       .query(async ({ input }) => {
-        // TODO: Fetch from database
-        return null;
+        const agent = await db.specialAgents.findById(input.agentId);
+        return agent;
       }),
 
     // Train an agent
@@ -124,11 +124,61 @@ export const trainerRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // TODO: Implement agent chat using OpenAI with agent's system prompt
-        return {
-          response: "Agent response placeholder",
-          agentId: input.agentId
-        };
+        // Get agent details
+        const agent = await db.specialAgents.findById(input.agentId);
+        if (!agent) {
+          throw new Error('Agent not found');
+        }
+
+        // Build system prompt from agent persona
+        const systemPrompt = `You are ${agent.name}, ${agent.title || 'a specialized legal AI agent'}.
+
+Your specialty: ${agent.specialty}
+
+${agent.persona ? JSON.stringify(agent.persona) : 'You provide expert legal guidance and support.'}
+
+Provide helpful, professional, and accurate responses. Always maintain your character and expertise.`;
+
+        // Call OpenAI
+        const messages = [
+          { role: 'system', content: systemPrompt },
+          ...(input.conversationHistory || []),
+          { role: 'user', content: input.message }
+        ];
+
+        try {
+          const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-4.1-mini',
+              messages: messages,
+              temperature: 0.7,
+              max_tokens: 1000
+            })
+          });
+
+          const data = await response.json();
+          
+          if (!response.ok) {
+            console.error('OpenAI error:', data);
+            throw new Error(data.error?.message || 'Failed to get response from AI');
+          }
+
+          return {
+            response: data.choices[0].message.content,
+            agentId: input.agentId
+          };
+        } catch (error) {
+          console.error('Chat error:', error);
+          return {
+            response: `I apologize, but I'm having trouble connecting right now. As ${agent.name}, I'm here to help with ${agent.specialty}. Please try again in a moment.`,
+            agentId: input.agentId
+          };
+        }
       })
   }),
 
