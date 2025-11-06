@@ -1,0 +1,466 @@
+[
+  {
+    "id": "kb_bankruptcy",
+    "specialty": "BANKRUPTCY",
+    "documents": [
+      {
+        "id": "bankruptcy_001",
+        "title": "Chapter 7 Bankruptcy Overview",
+        "specialty": "BANKRUPTCY",
+        "content": "Chapter 7 bankruptcy, also known as liquidation bankruptcy, is the most common form of bankruptcy in the United States. It involves the sale of a debtor's non-exempt assets by a trustee, with the proceeds distributed to creditors. Most unsecured debts are discharged, providing the debtor with a fresh financial start. The process typically takes 3-6 months from filing to discharge. Eligibility requires passing the means test, which compares the debtor's income to the state median. Exempt assets often include a primary residence (up to a certain equity amount), personal property, retirement accounts, and tools of trade.",
+        "category": "chapter_7",
+        "tags": [
+          "liquidation",
+          "discharge",
+          "means test",
+          "exemptions"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_002",
+        "title": "Chapter 13 Bankruptcy Repayment Plans",
+        "specialty": "BANKRUPTCY",
+        "content": "Chapter 13 bankruptcy allows individuals with regular income to develop a plan to repay all or part of their debts over 3-5 years. Unlike Chapter 7, debtors keep their property but must make monthly payments to a trustee who distributes funds to creditors. This option is beneficial for those who want to save their home from foreclosure or catch up on secured debt payments. The repayment plan must pay priority debts in full (taxes, child support) and provide at least as much to unsecured creditors as they would receive in Chapter 7. Upon successful completion of the plan, remaining eligible debts are discharged.",
+        "category": "chapter_13",
+        "tags": [
+          "repayment plan",
+          "foreclosure",
+          "secured debt",
+          "wage earner plan"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_003",
+        "title": "Chapter 11 Business Reorganization",
+        "specialty": "BANKRUPTCY",
+        "content": "Chapter 11 bankruptcy is primarily used by businesses to reorganize their debts while continuing operations. It allows the debtor to propose a reorganization plan to keep the business alive and pay creditors over time. The debtor typically remains in control as a 'debtor in possession' and has the exclusive right to file a reorganization plan for the first 120 days. Creditors vote on the plan, and if approved by the court, the business continues operating under the reorganized structure. This chapter is complex and expensive but can save businesses from liquidation. It's also available to individuals with substantial debt exceeding Chapter 13 limits.",
+        "category": "chapter_11",
+        "tags": [
+          "reorganization",
+          "business bankruptcy",
+          "debtor in possession",
+          "creditor voting"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_004",
+        "title": "Automatic Stay Protection",
+        "specialty": "BANKRUPTCY",
+        "content": "The automatic stay is one of the most powerful protections in bankruptcy law. It goes into effect immediately upon filing and stops most collection actions against the debtor, including lawsuits, foreclosures, repossessions, wage garnishments, and creditor harassment. The stay provides breathing room for the debtor to reorganize finances or liquidate assets in an orderly manner. However, certain actions are not stopped by the automatic stay, including criminal proceedings, certain tax proceedings, and actions to establish paternity or collect child support. Creditors can request relief from the stay by filing a motion with the bankruptcy court, which is often granted for secured creditors regarding collateral.",
+        "category": "protections",
+        "tags": [
+          "automatic stay",
+          "collection actions",
+          "foreclosure",
+          "creditor protection"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_005",
+        "title": "Dischargeable vs Non-Dischargeable Debts",
+        "specialty": "BANKRUPTCY",
+        "content": "Not all debts can be eliminated through bankruptcy. Dischargeable debts typically include credit card debt, medical bills, personal loans, and utility bills. Non-dischargeable debts include most student loans (unless undue hardship is proven), recent taxes (generally less than 3 years old), child support and alimony, debts from fraud or malicious injury, DUI-related debts, and certain fines and penalties. Priority debts like recent taxes and domestic support obligations must be paid in full in Chapter 13 plans. Understanding which debts can be discharged is crucial for determining whether bankruptcy is the right solution for a debtor's financial situation.",
+        "category": "discharge",
+        "tags": [
+          "dischargeable debts",
+          "non-dischargeable",
+          "student loans",
+          "taxes",
+          "priority debts"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_006",
+        "title": "Means Test and Eligibility",
+        "specialty": "BANKRUPTCY",
+        "content": "The means test determines eligibility for Chapter 7 bankruptcy and calculates required payments in Chapter 13. It compares the debtor's current monthly income (average of last 6 months) to the median income for their state and household size. If income is below the median, the debtor qualifies for Chapter 7. If above, a detailed calculation considers allowed expenses to determine disposable income. The test includes deductions for secured debt payments, taxes, insurance, food, clothing, housing, utilities, transportation, and other necessary expenses. Debtors who fail the means test may still file Chapter 13 or seek exemption based on special circumstances like military service or disability.",
+        "category": "eligibility",
+        "tags": [
+          "means test",
+          "income calculation",
+          "median income",
+          "disposable income"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_007",
+        "title": "Bankruptcy Exemptions and Asset Protection",
+        "specialty": "BANKRUPTCY",
+        "content": "Bankruptcy exemptions allow debtors to protect certain assets from liquidation in Chapter 7 or determine the minimum payment to unsecured creditors in Chapter 13. Federal exemptions include homestead ($27,900), motor vehicle ($4,450), household goods ($14,875 total, $700 per item), jewelry ($1,875), tools of trade ($2,800), and wildcard ($1,475 plus unused homestead). Many states offer their own exemption schemes, and some allow debtors to choose between state and federal exemptions. Michigan allows debtors to choose. Retirement accounts (401k, IRA) are generally fully exempt under federal law. Strategic exemption planning before filing can help debtors maximize asset protection.",
+        "category": "exemptions",
+        "tags": [
+          "exemptions",
+          "asset protection",
+          "homestead",
+          "retirement accounts",
+          "wildcard"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_008",
+        "title": "Bankruptcy Trustee Roles and Responsibilities",
+        "specialty": "BANKRUPTCY",
+        "content": "The bankruptcy trustee is a court-appointed official who administers the bankruptcy case. In Chapter 7, the trustee's primary role is to liquidate non-exempt assets and distribute proceeds to creditors. They review the debtor's financial documents, conduct the 341 meeting of creditors, investigate potential fraud, and object to improper exemptions. In Chapter 13, the trustee reviews the repayment plan, collects monthly payments from the debtor, and distributes funds to creditors according to the plan. Trustees are compensated from the bankruptcy estate and have a fiduciary duty to maximize returns to creditors while ensuring fair treatment of the debtor. They can bring adversary proceedings to recover fraudulent transfers or preferential payments.",
+        "category": "process",
+        "tags": [
+          "trustee",
+          "341 meeting",
+          "asset liquidation",
+          "fraud investigation"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_009",
+        "title": "Reaffirmation Agreements",
+        "specialty": "BANKRUPTCY",
+        "content": "A reaffirmation agreement is a legally binding contract between a debtor and creditor to repay a debt that would otherwise be discharged in bankruptcy. It's most commonly used for secured debts like car loans or mortgages when the debtor wants to keep the collateral. The agreement must be filed with the court before discharge and can be rescinded within 60 days. Courts scrutinize reaffirmation agreements to ensure they don't create undue hardship for the debtor. Debtors represented by attorneys must have their lawyer certify that the agreement is in the debtor's best interest. Without reaffirmation, debtors can often keep property by continuing payments informally (ride-through) or redeeming it by paying current value in a lump sum.",
+        "category": "secured_debt",
+        "tags": [
+          "reaffirmation",
+          "secured debt",
+          "car loans",
+          "mortgage",
+          "redemption"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "bankruptcy_010",
+        "title": "Credit Counseling and Debtor Education Requirements",
+        "specialty": "BANKRUPTCY",
+        "content": "The Bankruptcy Abuse Prevention and Consumer Protection Act of 2005 requires individual debtors to complete credit counseling from an approved agency within 180 days before filing. This session reviews alternatives to bankruptcy and helps create a budget. Debtors must also complete a debtor education course before discharge, covering financial management and budgeting skills. Both requirements can be completed online, by phone, or in person. Failure to complete these courses will result in denial of discharge. Exceptions exist for disabled, incapacitated, or active military debtors in combat zones. The courses typically cost $50-100 total and take 1-2 hours each.",
+        "category": "requirements",
+        "tags": [
+          "credit counseling",
+          "debtor education",
+          "pre-filing requirements",
+          "financial management"
+        ],
+        "relevance_score": 1
+      }
+    ],
+    "documentCount": 10,
+    "lastUpdatedAt": "2025-11-06T06:26:21.646Z"
+  },
+  {
+    "id": "kb_family_law",
+    "specialty": "FAMILY_LAW",
+    "documents": [
+      {
+        "id": "family_001",
+        "title": "Divorce Process and Grounds",
+        "specialty": "FAMILY_LAW",
+        "content": "Divorce is the legal dissolution of a marriage by a court. Michigan is a no-fault divorce state, meaning neither party needs to prove wrongdoing. The only ground for divorce is that there has been a breakdown of the marriage relationship to the extent that the objects of matrimony have been destroyed and there remains no reasonable likelihood that the marriage can be preserved. The process begins with filing a Complaint for Divorce, serving the other spouse, and waiting through a statutory waiting period (6 months with minor children, 60 days without). During this time, parties negotiate or litigate issues of property division, spousal support, child custody, parenting time, and child support. Divorce can be contested or uncontested, with uncontested divorces being faster and less expensive.",
+        "category": "divorce",
+        "tags": [
+          "divorce",
+          "no-fault",
+          "complaint",
+          "waiting period",
+          "dissolution"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_002",
+        "title": "Child Custody: Legal vs Physical",
+        "specialty": "FAMILY_LAW",
+        "content": "Child custody has two components: legal custody and physical custody. Legal custody refers to the right to make major decisions about the child's life, including education, healthcare, and religious upbringing. Physical custody refers to where the child lives. Both types can be sole (one parent) or joint (shared). Michigan courts presume that joint legal custody is in the child's best interest unless there's evidence of domestic violence or the parents cannot cooperate. Physical custody arrangements vary widely, from primary physical custody with one parent (other has parenting time) to true 50/50 shared physical custody. Courts determine custody based on the best interest factors outlined in MCL 722.23, including the child's relationship with each parent, each parent's ability to provide love and guidance, and the child's preference if of sufficient age.",
+        "category": "custody",
+        "tags": [
+          "child custody",
+          "legal custody",
+          "physical custody",
+          "joint custody",
+          "best interest"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_003",
+        "title": "Child Support Calculation and Enforcement",
+        "specialty": "FAMILY_LAW",
+        "content": "Child support in Michigan is calculated using the Michigan Child Support Formula, which considers both parents' incomes, number of overnights each parent has, childcare costs, health insurance premiums, and other factors. The formula aims to ensure children receive the same proportion of parental income they would have if the family remained intact. Support typically continues until the child turns 18 or graduates high school (whichever is later), up to age 19.5. Parents can agree to deviate from the formula, but courts must approve and find the agreement is in the child's best interest. Enforcement mechanisms include income withholding, tax refund intercepts, license suspension, and contempt proceedings. The Friend of the Court office assists with calculation, collection, and enforcement of support orders.",
+        "category": "child_support",
+        "tags": [
+          "child support",
+          "support calculation",
+          "enforcement",
+          "friend of court",
+          "income withholding"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_004",
+        "title": "Spousal Support (Alimony)",
+        "specialty": "FAMILY_LAW",
+        "content": "Spousal support, also called alimony, is financial support paid by one spouse to the other during or after divorce. Unlike child support, there's no formula for calculating spousal support in Michigan. Courts consider factors including length of marriage, each party's ability to work, age and health, standard of living during marriage, each party's assets and liabilities, and contributions to the other's education or career. Support can be temporary (during divorce proceedings), rehabilitative (limited duration to allow recipient to become self-supporting), or permanent (typically only in long marriages where recipient cannot become self-supporting). Support is modifiable based on changed circumstances and typically ends upon recipient's remarriage or cohabitation. Spousal support is tax-neutral under current federal law (no longer deductible for payor or taxable to recipient for divorces finalized after 2018).",
+        "category": "spousal_support",
+        "tags": [
+          "alimony",
+          "spousal support",
+          "rehabilitative support",
+          "permanent support",
+          "modification"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_005",
+        "title": "Property Division in Divorce",
+        "specialty": "FAMILY_LAW",
+        "content": "Michigan follows equitable distribution principles, meaning marital property is divided fairly but not necessarily equally. Marital property includes all assets and debts acquired during the marriage, regardless of whose name is on the title. Separate property (owned before marriage or received as gift/inheritance) generally remains with the original owner, but can become marital if commingled. Courts consider factors including duration of marriage, each party's contributions (including homemaking), each party's age and health, earning ability, and each party's needs. The marital home often requires special consideration, with options including sale and division of proceeds, buyout by one spouse, or deferred sale until children graduate. Retirement accounts are marital property subject to division, typically requiring a Qualified Domestic Relations Order (QDRO) for division without tax penalties.",
+        "category": "property_division",
+        "tags": [
+          "property division",
+          "equitable distribution",
+          "marital property",
+          "separate property",
+          "QDRO"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_006",
+        "title": "Parenting Time and Visitation",
+        "specialty": "FAMILY_LAW",
+        "content": "Parenting time (formerly called visitation) refers to the time the non-custodial parent spends with the child. Michigan law presumes that parenting time with both parents is in the child's best interest unless there's evidence it would endanger the child's physical, mental, or emotional health. Courts establish parenting time schedules that specify regular schedules (weekdays, weekends, holidays, school breaks, summer vacation) and decision-making protocols. Common schedules include alternating weekends, midweek visits, and alternating holidays. For very young children, more frequent but shorter visits may be appropriate. Courts can order supervised parenting time if there are safety concerns. Parenting time orders are enforceable through contempt proceedings, and denial of parenting time can result in make-up time, modification of custody, or other sanctions. Parents can modify schedules by agreement or court order based on changed circumstances.",
+        "category": "parenting_time",
+        "tags": [
+          "parenting time",
+          "visitation",
+          "parenting schedule",
+          "supervised visitation",
+          "enforcement"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_007",
+        "title": "Prenuptial and Postnuptial Agreements",
+        "specialty": "FAMILY_LAW",
+        "content": "Prenuptial agreements (before marriage) and postnuptial agreements (during marriage) are contracts that determine property division and spousal support in the event of divorce or death. These agreements can protect separate property, family businesses, inheritance rights, and define financial responsibilities during marriage. To be enforceable, the agreement must be in writing, signed voluntarily by both parties with full financial disclosure, and not be unconscionable. Each party should have independent legal counsel. Courts will not enforce provisions regarding child custody or child support, as these must be determined based on the child's best interest at the time of divorce. Prenups are particularly important for second marriages, business owners, individuals with significant separate property, or those with children from prior relationships. They can save significant time and expense in divorce proceedings.",
+        "category": "agreements",
+        "tags": [
+          "prenuptial agreement",
+          "postnuptial agreement",
+          "marital agreement",
+          "property protection"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_008",
+        "title": "Domestic Violence and Personal Protection Orders",
+        "specialty": "FAMILY_LAW",
+        "content": "Personal Protection Orders (PPOs) are court orders designed to protect individuals from domestic violence, stalking, or harassment. In Michigan, there are two types: domestic relationship PPOs (for family/household members or dating relationships) and non-domestic PPOs (for stalking or sexual assault by anyone). A PPO can prohibit contact, require the respondent to move out of a shared residence, prohibit purchase/possession of firearms, and grant temporary custody of minor children. Violation of a PPO is a criminal offense. PPOs can be obtained ex parte (without notice to the other party) in emergencies, with a hearing scheduled within 14 days. Domestic violence is a serious factor in custody determinations and can result in supervised parenting time or denial of custody. Victims can also seek criminal prosecution, file for divorce, and obtain exclusive use of the marital home.",
+        "category": "protection",
+        "tags": [
+          "domestic violence",
+          "PPO",
+          "protection order",
+          "restraining order",
+          "safety"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_009",
+        "title": "Paternity Establishment and Rights",
+        "specialty": "FAMILY_LAW",
+        "content": "Paternity is the legal establishment of a father-child relationship. For married parents, the husband is presumed to be the father. For unmarried parents, paternity can be established by signing an Affidavit of Parentage at the hospital or later, or through a court order (often involving genetic testing). Establishing paternity gives the father legal rights including custody and parenting time, and creates obligations including child support. It also benefits the child by providing access to father's medical history, inheritance rights, social security benefits, and health insurance. Paternity can be challenged within 3 years of signing an Affidavit of Parentage if there's evidence of fraud, duress, or material mistake of fact. Once paternity is established, the father has the same rights and responsibilities as a father in a marriage, including the right to seek custody or parenting time.",
+        "category": "paternity",
+        "tags": [
+          "paternity",
+          "affidavit of parentage",
+          "genetic testing",
+          "father's rights",
+          "establishment"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "family_010",
+        "title": "Modification of Custody and Support Orders",
+        "specialty": "FAMILY_LAW",
+        "content": "Custody, parenting time, and support orders can be modified when there's a change in circumstances. For custody modifications, the moving party must show either proper cause (specific facts) or a change of circumstances (significant changes since the last order). Courts then re-evaluate the best interest factors to determine if modification is appropriate. The bar is high to prevent constant relitigation. Child support can be modified when there's a change in circumstances making the existing order unfair or inappropriate, such as significant income changes, changes in number of overnights, or changes in childcare costs. A 10% change in the support amount calculated under the formula is generally considered a change of circumstances. Spousal support can be modified based on changed circumstances unless the judgment specifically makes it non-modifiable. Modifications require filing a motion with the court and cannot be made retroactively before the motion filing date.",
+        "category": "modification",
+        "tags": [
+          "modification",
+          "change of circumstances",
+          "custody modification",
+          "support modification"
+        ],
+        "relevance_score": 1
+      }
+    ],
+    "documentCount": 10,
+    "lastUpdatedAt": "2025-11-06T06:26:21.646Z"
+  },
+  {
+    "id": "kb_criminal",
+    "specialty": "CRIMINAL",
+    "documents": [
+      {
+        "id": "criminal_001",
+        "title": "Constitutional Rights of the Accused",
+        "specialty": "CRIMINAL",
+        "content": "The U.S. Constitution provides fundamental rights to criminal defendants. The Fourth Amendment protects against unreasonable searches and seizures, requiring warrants based on probable cause. The Fifth Amendment provides the right against self-incrimination (right to remain silent), protection against double jeopardy, and due process. The Sixth Amendment guarantees the right to a speedy and public trial, an impartial jury, to be informed of charges, to confront witnesses, to compel witnesses to testify, and to have assistance of counsel. The Eighth Amendment prohibits excessive bail and cruel and unusual punishment. Miranda rights (right to remain silent and to an attorney) must be read before custodial interrogation. Violation of these rights can result in suppression of evidence or dismissal of charges. Understanding and asserting these rights is crucial for any criminal defendant.",
+        "category": "constitutional_rights",
+        "tags": [
+          "constitutional rights",
+          "Miranda rights",
+          "Fourth Amendment",
+          "Fifth Amendment",
+          "Sixth Amendment"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_002",
+        "title": "Felony vs Misdemeanor Classifications",
+        "specialty": "CRIMINAL",
+        "content": "Crimes are classified as felonies, misdemeanors, or infractions based on severity and potential punishment. Felonies are the most serious crimes, punishable by more than one year in prison. They include murder, rape, robbery, burglary, and drug trafficking. Felonies are further divided into classes (A, B, C, etc.) or degrees (first, second, third) with varying maximum sentences. Misdemeanors are less serious, punishable by up to one year in jail, and include crimes like simple assault, DUI, petty theft, and disorderly conduct. Infractions (violations) are minor offenses usually punishable only by fines, like traffic tickets. Felony convictions carry serious collateral consequences including loss of voting rights, firearm possession rights, professional licenses, and employment opportunities. Many felonies can be reduced to misdemeanors through plea bargaining or sentencing alternatives.",
+        "category": "classifications",
+        "tags": [
+          "felony",
+          "misdemeanor",
+          "crime classification",
+          "sentencing",
+          "collateral consequences"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_003",
+        "title": "Plea Bargaining Process",
+        "specialty": "CRIMINAL",
+        "content": "Plea bargaining is the negotiation process between the prosecution and defense to resolve a criminal case without trial. Over 90% of criminal cases are resolved through plea agreements. Common types include charge bargaining (reducing charges to lesser offenses), sentence bargaining (agreeing to a specific sentence recommendation), and count bargaining (dismissing some charges in exchange for guilty plea to others). Defendants must voluntarily and intelligently waive their right to trial. Courts must ensure the defendant understands the charges, consequences, and rights being waived. Benefits of plea bargaining include certainty of outcome, reduced charges/sentences, faster resolution, and lower costs. Risks include giving up the right to trial and potential for coercion. Defense attorneys must advise clients about plea offers, but the decision to accept ultimately belongs to the defendant.",
+        "category": "plea_bargaining",
+        "tags": [
+          "plea bargain",
+          "plea agreement",
+          "charge reduction",
+          "sentence negotiation"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_004",
+        "title": "Bail and Pretrial Release",
+        "specialty": "CRIMINAL",
+        "content": "Bail is the amount of money or property deposited with the court to ensure the defendant's appearance at trial. The Eighth Amendment prohibits excessive bail. Courts consider factors including severity of charges, defendant's criminal history, ties to the community, flight risk, and danger to the community. Bail can be cash (full amount), surety bond (bail bondsman posts bond for 10% fee), property bond, or personal recognizance (released on promise to appear). Defendants who cannot afford bail may remain in jail pending trial, creating pressure to accept unfavorable plea deals. Bail reform movements advocate for eliminating cash bail and using risk assessment tools instead. Conditions of release may include GPS monitoring, drug testing, no-contact orders, or travel restrictions. Violation of bail conditions can result in revocation and return to custody.",
+        "category": "bail",
+        "tags": [
+          "bail",
+          "pretrial release",
+          "bond",
+          "detention",
+          "bail reform"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_005",
+        "title": "Criminal Trial Process and Stages",
+        "specialty": "CRIMINAL",
+        "content": "A criminal trial proceeds through several stages. Jury selection (voir dire) involves questioning potential jurors to ensure impartiality. Opening statements allow each side to preview their case. The prosecution presents its case first, calling witnesses and introducing evidence. The defense can cross-examine prosecution witnesses. After the prosecution rests, the defense may move for directed verdict (dismissal for insufficient evidence). The defense then presents its case, though the defendant has no obligation to testify or present evidence. Closing arguments allow each side to summarize evidence and argue for their position. The judge instructs the jury on applicable law. Jury deliberation follows, requiring unanimous verdict in federal cases and most state felonies. If the jury cannot reach a verdict (hung jury), the case may be retried. Guilty verdicts are followed by sentencing hearings.",
+        "category": "trial_process",
+        "tags": [
+          "criminal trial",
+          "jury selection",
+          "trial stages",
+          "verdict",
+          "jury deliberation"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_006",
+        "title": "Search and Seizure Law",
+        "specialty": "CRIMINAL",
+        "content": "The Fourth Amendment protects against unreasonable searches and seizures. Generally, police need a warrant based on probable cause to search a person, home, or property. Exceptions include consent searches, searches incident to lawful arrest, plain view doctrine, exigent circumstances (emergency), automobile exception (mobile vehicles with probable cause), and stop and frisk (reasonable suspicion of criminal activity). Evidence obtained through illegal searches can be suppressed under the exclusionary rule, meaning it cannot be used at trial. The 'fruit of the poisonous tree' doctrine extends suppression to evidence derived from illegal searches. Defendants can challenge searches through motions to suppress. Standing to challenge a search requires a reasonable expectation of privacy in the place searched. Modern issues include cell phone searches, GPS tracking, and digital privacy.",
+        "category": "search_seizure",
+        "tags": [
+          "Fourth Amendment",
+          "search warrant",
+          "probable cause",
+          "exclusionary rule",
+          "suppression"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_007",
+        "title": "DUI/DWI Defense Strategies",
+        "specialty": "CRIMINAL",
+        "content": "DUI (Driving Under the Influence) and DWI (Driving While Intoxicated) charges involve operating a vehicle while impaired by alcohol or drugs. Most states set the legal limit at 0.08% blood alcohol content (BAC). Defense strategies include challenging the traffic stop (lack of reasonable suspicion), challenging field sobriety tests (improper administration, medical conditions affecting performance), challenging breathalyzer results (machine calibration, mouth alcohol, rising BAC defense), challenging blood test procedures (chain of custody, contamination), and necessity defense (drove to avoid greater harm). Penalties increase for high BAC, prior offenses, accidents, or child passengers. Consequences include license suspension, fines, jail time, ignition interlock devices, and increased insurance rates. Many states offer diversion programs for first offenders, allowing dismissal upon completion of alcohol education and probation.",
+        "category": "dui_defense",
+        "tags": [
+          "DUI",
+          "DWI",
+          "breathalyzer",
+          "field sobriety tests",
+          "impaired driving"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_008",
+        "title": "Drug Possession and Trafficking Charges",
+        "specialty": "CRIMINAL",
+        "content": "Drug offenses range from simple possession to trafficking and manufacturing. Possession can be actual (on person) or constructive (control over location where drugs found). Prosecutors must prove knowing possession. Defenses include lack of knowledge, lack of possession, illegal search and seizure, and entrapment. Trafficking charges are based on quantity possessed (presumption of intent to distribute) or evidence of distribution activity. Federal mandatory minimum sentences apply to certain drug quantities. Many states have decriminalized marijuana possession or legalized it entirely. Drug courts offer treatment-focused alternatives to incarceration for non-violent offenders. Possession of drug paraphernalia is a separate offense. Prescription drug possession without a valid prescription is illegal. Asset forfeiture allows government to seize property connected to drug crimes, even without conviction.",
+        "category": "drug_offenses",
+        "tags": [
+          "drug possession",
+          "drug trafficking",
+          "controlled substances",
+          "mandatory minimums",
+          "drug court"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_009",
+        "title": "Assault and Battery Charges",
+        "specialty": "CRIMINAL",
+        "content": "Assault and battery are separate but related offenses. Assault is the threat or attempt to cause harmful or offensive contact, requiring intent and reasonable apprehension by the victim. Battery is actual harmful or offensive physical contact. Aggravated assault/battery involves use of a weapon, serious injury, or protected victim (police officer, child, elderly). Defenses include self-defense (reasonable force to protect oneself from imminent harm), defense of others, consent, and lack of intent. Self-defense requires reasonable belief of imminent harm and proportional response. The 'duty to retreat' varies by state; some require attempting to avoid confrontation before using force, while 'stand your ground' states do not. Domestic violence assault carries enhanced penalties and collateral consequences including loss of firearm rights under federal law. Assault charges can be reduced to disorderly conduct or dismissed based on circumstances.",
+        "category": "violent_crimes",
+        "tags": [
+          "assault",
+          "battery",
+          "self-defense",
+          "aggravated assault",
+          "domestic violence"
+        ],
+        "relevance_score": 1
+      },
+      {
+        "id": "criminal_010",
+        "title": "Expungement and Record Sealing",
+        "specialty": "CRIMINAL",
+        "content": "Expungement (or record sealing) removes or limits public access to criminal records, helping individuals move past their criminal history. Eligibility varies by state and typically requires completing sentence, waiting period (often 3-5 years), no subsequent convictions, and meeting other criteria. Some states allow expungement of arrests that didn't lead to conviction, dismissed charges, or acquittals. Certain serious offenses (murder, sex crimes) are typically ineligible. The process involves filing a petition with the court, sometimes requiring a hearing where the prosecutor can object. Benefits include improved employment prospects, housing opportunities, and restoration of rights. Even after expungement, records may still be accessible to law enforcement and certain licensing boards. Some states have automatic expungement for certain offenses. Federal expungement is very limited. Pardons (executive clemency) are an alternative that forgives the crime but doesn't erase the record.",
+        "category": "record_relief",
+        "tags": [
+          "expungement",
+          "record sealing",
+          "criminal record",
+          "second chance",
+          "pardon"
+        ],
+        "relevance_score": 1
+      }
+    ],
+    "documentCount": 10,
+    "lastUpdatedAt": "2025-11-06T06:26:21.647Z"
+  }
+]

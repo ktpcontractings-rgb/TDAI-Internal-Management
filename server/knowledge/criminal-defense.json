@@ -1,0 +1,92 @@
+[
+  {
+    "id": "criminal_001",
+    "title": "Constitutional Rights of the Accused",
+    "specialty": "CRIMINAL",
+    "content": "The U.S. Constitution provides fundamental rights to criminal defendants. The Fourth Amendment protects against unreasonable searches and seizures, requiring warrants based on probable cause. The Fifth Amendment provides the right against self-incrimination (right to remain silent), protection against double jeopardy, and due process. The Sixth Amendment guarantees the right to a speedy and public trial, an impartial jury, to be informed of charges, to confront witnesses, to compel witnesses to testify, and to have assistance of counsel. The Eighth Amendment prohibits excessive bail and cruel and unusual punishment. Miranda rights (right to remain silent and to an attorney) must be read before custodial interrogation. Violation of these rights can result in suppression of evidence or dismissal of charges. Understanding and asserting these rights is crucial for any criminal defendant.",
+    "category": "constitutional_rights",
+    "tags": ["constitutional rights", "Miranda rights", "Fourth Amendment", "Fifth Amendment", "Sixth Amendment"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_002",
+    "title": "Felony vs Misdemeanor Classifications",
+    "specialty": "CRIMINAL",
+    "content": "Crimes are classified as felonies, misdemeanors, or infractions based on severity and potential punishment. Felonies are the most serious crimes, punishable by more than one year in prison. They include murder, rape, robbery, burglary, and drug trafficking. Felonies are further divided into classes (A, B, C, etc.) or degrees (first, second, third) with varying maximum sentences. Misdemeanors are less serious, punishable by up to one year in jail, and include crimes like simple assault, DUI, petty theft, and disorderly conduct. Infractions (violations) are minor offenses usually punishable only by fines, like traffic tickets. Felony convictions carry serious collateral consequences including loss of voting rights, firearm possession rights, professional licenses, and employment opportunities. Many felonies can be reduced to misdemeanors through plea bargaining or sentencing alternatives.",
+    "category": "classifications",
+    "tags": ["felony", "misdemeanor", "crime classification", "sentencing", "collateral consequences"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_003",
+    "title": "Plea Bargaining Process",
+    "specialty": "CRIMINAL",
+    "content": "Plea bargaining is the negotiation process between the prosecution and defense to resolve a criminal case without trial. Over 90% of criminal cases are resolved through plea agreements. Common types include charge bargaining (reducing charges to lesser offenses), sentence bargaining (agreeing to a specific sentence recommendation), and count bargaining (dismissing some charges in exchange for guilty plea to others). Defendants must voluntarily and intelligently waive their right to trial. Courts must ensure the defendant understands the charges, consequences, and rights being waived. Benefits of plea bargaining include certainty of outcome, reduced charges/sentences, faster resolution, and lower costs. Risks include giving up the right to trial and potential for coercion. Defense attorneys must advise clients about plea offers, but the decision to accept ultimately belongs to the defendant.",
+    "category": "plea_bargaining",
+    "tags": ["plea bargain", "plea agreement", "charge reduction", "sentence negotiation"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_004",
+    "title": "Bail and Pretrial Release",
+    "specialty": "CRIMINAL",
+    "content": "Bail is the amount of money or property deposited with the court to ensure the defendant's appearance at trial. The Eighth Amendment prohibits excessive bail. Courts consider factors including severity of charges, defendant's criminal history, ties to the community, flight risk, and danger to the community. Bail can be cash (full amount), surety bond (bail bondsman posts bond for 10% fee), property bond, or personal recognizance (released on promise to appear). Defendants who cannot afford bail may remain in jail pending trial, creating pressure to accept unfavorable plea deals. Bail reform movements advocate for eliminating cash bail and using risk assessment tools instead. Conditions of release may include GPS monitoring, drug testing, no-contact orders, or travel restrictions. Violation of bail conditions can result in revocation and return to custody.",
+    "category": "bail",
+    "tags": ["bail", "pretrial release", "bond", "detention", "bail reform"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_005",
+    "title": "Criminal Trial Process and Stages",
+    "specialty": "CRIMINAL",
+    "content": "A criminal trial proceeds through several stages. Jury selection (voir dire) involves questioning potential jurors to ensure impartiality. Opening statements allow each side to preview their case. The prosecution presents its case first, calling witnesses and introducing evidence. The defense can cross-examine prosecution witnesses. After the prosecution rests, the defense may move for directed verdict (dismissal for insufficient evidence). The defense then presents its case, though the defendant has no obligation to testify or present evidence. Closing arguments allow each side to summarize evidence and argue for their position. The judge instructs the jury on applicable law. Jury deliberation follows, requiring unanimous verdict in federal cases and most state felonies. If the jury cannot reach a verdict (hung jury), the case may be retried. Guilty verdicts are followed by sentencing hearings.",
+    "category": "trial_process",
+    "tags": ["criminal trial", "jury selection", "trial stages", "verdict", "jury deliberation"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_006",
+    "title": "Search and Seizure Law",
+    "specialty": "CRIMINAL",
+    "content": "The Fourth Amendment protects against unreasonable searches and seizures. Generally, police need a warrant based on probable cause to search a person, home, or property. Exceptions include consent searches, searches incident to lawful arrest, plain view doctrine, exigent circumstances (emergency), automobile exception (mobile vehicles with probable cause), and stop and frisk (reasonable suspicion of criminal activity). Evidence obtained through illegal searches can be suppressed under the exclusionary rule, meaning it cannot be used at trial. The 'fruit of the poisonous tree' doctrine extends suppression to evidence derived from illegal searches. Defendants can challenge searches through motions to suppress. Standing to challenge a search requires a reasonable expectation of privacy in the place searched. Modern issues include cell phone searches, GPS tracking, and digital privacy.",
+    "category": "search_seizure",
+    "tags": ["Fourth Amendment", "search warrant", "probable cause", "exclusionary rule", "suppression"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_007",
+    "title": "DUI/DWI Defense Strategies",
+    "specialty": "CRIMINAL",
+    "content": "DUI (Driving Under the Influence) and DWI (Driving While Intoxicated) charges involve operating a vehicle while impaired by alcohol or drugs. Most states set the legal limit at 0.08% blood alcohol content (BAC). Defense strategies include challenging the traffic stop (lack of reasonable suspicion), challenging field sobriety tests (improper administration, medical conditions affecting performance), challenging breathalyzer results (machine calibration, mouth alcohol, rising BAC defense), challenging blood test procedures (chain of custody, contamination), and necessity defense (drove to avoid greater harm). Penalties increase for high BAC, prior offenses, accidents, or child passengers. Consequences include license suspension, fines, jail time, ignition interlock devices, and increased insurance rates. Many states offer diversion programs for first offenders, allowing dismissal upon completion of alcohol education and probation.",
+    "category": "dui_defense",
+    "tags": ["DUI", "DWI", "breathalyzer", "field sobriety tests", "impaired driving"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_008",
+    "title": "Drug Possession and Trafficking Charges",
+    "specialty": "CRIMINAL",
+    "content": "Drug offenses range from simple possession to trafficking and manufacturing. Possession can be actual (on person) or constructive (control over location where drugs found). Prosecutors must prove knowing possession. Defenses include lack of knowledge, lack of possession, illegal search and seizure, and entrapment. Trafficking charges are based on quantity possessed (presumption of intent to distribute) or evidence of distribution activity. Federal mandatory minimum sentences apply to certain drug quantities. Many states have decriminalized marijuana possession or legalized it entirely. Drug courts offer treatment-focused alternatives to incarceration for non-violent offenders. Possession of drug paraphernalia is a separate offense. Prescription drug possession without a valid prescription is illegal. Asset forfeiture allows government to seize property connected to drug crimes, even without conviction.",
+    "category": "drug_offenses",
+    "tags": ["drug possession", "drug trafficking", "controlled substances", "mandatory minimums", "drug court"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_009",
+    "title": "Assault and Battery Charges",
+    "specialty": "CRIMINAL",
+    "content": "Assault and battery are separate but related offenses. Assault is the threat or attempt to cause harmful or offensive contact, requiring intent and reasonable apprehension by the victim. Battery is actual harmful or offensive physical contact. Aggravated assault/battery involves use of a weapon, serious injury, or protected victim (police officer, child, elderly). Defenses include self-defense (reasonable force to protect oneself from imminent harm), defense of others, consent, and lack of intent. Self-defense requires reasonable belief of imminent harm and proportional response. The 'duty to retreat' varies by state; some require attempting to avoid confrontation before using force, while 'stand your ground' states do not. Domestic violence assault carries enhanced penalties and collateral consequences including loss of firearm rights under federal law. Assault charges can be reduced to disorderly conduct or dismissed based on circumstances.",
+    "category": "violent_crimes",
+    "tags": ["assault", "battery", "self-defense", "aggravated assault", "domestic violence"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "criminal_010",
+    "title": "Expungement and Record Sealing",
+    "specialty": "CRIMINAL",
+    "content": "Expungement (or record sealing) removes or limits public access to criminal records, helping individuals move past their criminal history. Eligibility varies by state and typically requires completing sentence, waiting period (often 3-5 years), no subsequent convictions, and meeting other criteria. Some states allow expungement of arrests that didn't lead to conviction, dismissed charges, or acquittals. Certain serious offenses (murder, sex crimes) are typically ineligible. The process involves filing a petition with the court, sometimes requiring a hearing where the prosecutor can object. Benefits include improved employment prospects, housing opportunities, and restoration of rights. Even after expungement, records may still be accessible to law enforcement and certain licensing boards. Some states have automatic expungement for certain offenses. Federal expungement is very limited. Pardons (executive clemency) are an alternative that forgives the crime but doesn't erase the record.",
+    "category": "record_relief",
+    "tags": ["expungement", "record sealing", "criminal record", "second chance", "pardon"],
+    "relevance_score": 1.0
+  }
+]

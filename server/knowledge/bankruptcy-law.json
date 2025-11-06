@@ -1,0 +1,92 @@
+[
+  {
+    "id": "bankruptcy_001",
+    "title": "Chapter 7 Bankruptcy Overview",
+    "specialty": "BANKRUPTCY",
+    "content": "Chapter 7 bankruptcy, also known as liquidation bankruptcy, is the most common form of bankruptcy in the United States. It involves the sale of a debtor's non-exempt assets by a trustee, with the proceeds distributed to creditors. Most unsecured debts are discharged, providing the debtor with a fresh financial start. The process typically takes 3-6 months from filing to discharge. Eligibility requires passing the means test, which compares the debtor's income to the state median. Exempt assets often include a primary residence (up to a certain equity amount), personal property, retirement accounts, and tools of trade.",
+    "category": "chapter_7",
+    "tags": ["liquidation", "discharge", "means test", "exemptions"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_002",
+    "title": "Chapter 13 Bankruptcy Repayment Plans",
+    "specialty": "BANKRUPTCY",
+    "content": "Chapter 13 bankruptcy allows individuals with regular income to develop a plan to repay all or part of their debts over 3-5 years. Unlike Chapter 7, debtors keep their property but must make monthly payments to a trustee who distributes funds to creditors. This option is beneficial for those who want to save their home from foreclosure or catch up on secured debt payments. The repayment plan must pay priority debts in full (taxes, child support) and provide at least as much to unsecured creditors as they would receive in Chapter 7. Upon successful completion of the plan, remaining eligible debts are discharged.",
+    "category": "chapter_13",
+    "tags": ["repayment plan", "foreclosure", "secured debt", "wage earner plan"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_003",
+    "title": "Chapter 11 Business Reorganization",
+    "specialty": "BANKRUPTCY",
+    "content": "Chapter 11 bankruptcy is primarily used by businesses to reorganize their debts while continuing operations. It allows the debtor to propose a reorganization plan to keep the business alive and pay creditors over time. The debtor typically remains in control as a 'debtor in possession' and has the exclusive right to file a reorganization plan for the first 120 days. Creditors vote on the plan, and if approved by the court, the business continues operating under the reorganized structure. This chapter is complex and expensive but can save businesses from liquidation. It's also available to individuals with substantial debt exceeding Chapter 13 limits.",
+    "category": "chapter_11",
+    "tags": ["reorganization", "business bankruptcy", "debtor in possession", "creditor voting"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_004",
+    "title": "Automatic Stay Protection",
+    "specialty": "BANKRUPTCY",
+    "content": "The automatic stay is one of the most powerful protections in bankruptcy law. It goes into effect immediately upon filing and stops most collection actions against the debtor, including lawsuits, foreclosures, repossessions, wage garnishments, and creditor harassment. The stay provides breathing room for the debtor to reorganize finances or liquidate assets in an orderly manner. However, certain actions are not stopped by the automatic stay, including criminal proceedings, certain tax proceedings, and actions to establish paternity or collect child support. Creditors can request relief from the stay by filing a motion with the bankruptcy court, which is often granted for secured creditors regarding collateral.",
+    "category": "protections",
+    "tags": ["automatic stay", "collection actions", "foreclosure", "creditor protection"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_005",
+    "title": "Dischargeable vs Non-Dischargeable Debts",
+    "specialty": "BANKRUPTCY",
+    "content": "Not all debts can be eliminated through bankruptcy. Dischargeable debts typically include credit card debt, medical bills, personal loans, and utility bills. Non-dischargeable debts include most student loans (unless undue hardship is proven), recent taxes (generally less than 3 years old), child support and alimony, debts from fraud or malicious injury, DUI-related debts, and certain fines and penalties. Priority debts like recent taxes and domestic support obligations must be paid in full in Chapter 13 plans. Understanding which debts can be discharged is crucial for determining whether bankruptcy is the right solution for a debtor's financial situation.",
+    "category": "discharge",
+    "tags": ["dischargeable debts", "non-dischargeable", "student loans", "taxes", "priority debts"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_006",
+    "title": "Means Test and Eligibility",
+    "specialty": "BANKRUPTCY",
+    "content": "The means test determines eligibility for Chapter 7 bankruptcy and calculates required payments in Chapter 13. It compares the debtor's current monthly income (average of last 6 months) to the median income for their state and household size. If income is below the median, the debtor qualifies for Chapter 7. If above, a detailed calculation considers allowed expenses to determine disposable income. The test includes deductions for secured debt payments, taxes, insurance, food, clothing, housing, utilities, transportation, and other necessary expenses. Debtors who fail the means test may still file Chapter 13 or seek exemption based on special circumstances like military service or disability.",
+    "category": "eligibility",
+    "tags": ["means test", "income calculation", "median income", "disposable income"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_007",
+    "title": "Bankruptcy Exemptions and Asset Protection",
+    "specialty": "BANKRUPTCY",
+    "content": "Bankruptcy exemptions allow debtors to protect certain assets from liquidation in Chapter 7 or determine the minimum payment to unsecured creditors in Chapter 13. Federal exemptions include homestead ($27,900), motor vehicle ($4,450), household goods ($14,875 total, $700 per item), jewelry ($1,875), tools of trade ($2,800), and wildcard ($1,475 plus unused homestead). Many states offer their own exemption schemes, and some allow debtors to choose between state and federal exemptions. Michigan allows debtors to choose. Retirement accounts (401k, IRA) are generally fully exempt under federal law. Strategic exemption planning before filing can help debtors maximize asset protection.",
+    "category": "exemptions",
+    "tags": ["exemptions", "asset protection", "homestead", "retirement accounts", "wildcard"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_008",
+    "title": "Bankruptcy Trustee Roles and Responsibilities",
+    "specialty": "BANKRUPTCY",
+    "content": "The bankruptcy trustee is a court-appointed official who administers the bankruptcy case. In Chapter 7, the trustee's primary role is to liquidate non-exempt assets and distribute proceeds to creditors. They review the debtor's financial documents, conduct the 341 meeting of creditors, investigate potential fraud, and object to improper exemptions. In Chapter 13, the trustee reviews the repayment plan, collects monthly payments from the debtor, and distributes funds to creditors according to the plan. Trustees are compensated from the bankruptcy estate and have a fiduciary duty to maximize returns to creditors while ensuring fair treatment of the debtor. They can bring adversary proceedings to recover fraudulent transfers or preferential payments.",
+    "category": "process",
+    "tags": ["trustee", "341 meeting", "asset liquidation", "fraud investigation"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_009",
+    "title": "Reaffirmation Agreements",
+    "specialty": "BANKRUPTCY",
+    "content": "A reaffirmation agreement is a legally binding contract between a debtor and creditor to repay a debt that would otherwise be discharged in bankruptcy. It's most commonly used for secured debts like car loans or mortgages when the debtor wants to keep the collateral. The agreement must be filed with the court before discharge and can be rescinded within 60 days. Courts scrutinize reaffirmation agreements to ensure they don't create undue hardship for the debtor. Debtors represented by attorneys must have their lawyer certify that the agreement is in the debtor's best interest. Without reaffirmation, debtors can often keep property by continuing payments informally (ride-through) or redeeming it by paying current value in a lump sum.",
+    "category": "secured_debt",
+    "tags": ["reaffirmation", "secured debt", "car loans", "mortgage", "redemption"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "bankruptcy_010",
+    "title": "Credit Counseling and Debtor Education Requirements",
+    "specialty": "BANKRUPTCY",
+    "content": "The Bankruptcy Abuse Prevention and Consumer Protection Act of 2005 requires individual debtors to complete credit counseling from an approved agency within 180 days before filing. This session reviews alternatives to bankruptcy and helps create a budget. Debtors must also complete a debtor education course before discharge, covering financial management and budgeting skills. Both requirements can be completed online, by phone, or in person. Failure to complete these courses will result in denial of discharge. Exceptions exist for disabled, incapacitated, or active military debtors in combat zones. The courses typically cost $50-100 total and take 1-2 hours each.",
+    "category": "requirements",
+    "tags": ["credit counseling", "debtor education", "pre-filing requirements", "financial management"],
+    "relevance_score": 1.0
+  }
+]

@@ -32,6 +32,19 @@ export const knowledgeBasesTable = pgTable('knowledge_bases', {
   lastUpdatedAt: timestamp('last_updated_at').defaultNow().notNull(),
 });
 
+// Legal Documents (Individual documents with embeddings for RAG)
+export const legalDocumentsTable = pgTable('legal_documents', {
+  id: serial('id').primaryKey(),
+  specialty: text('specialty').notNull(), // 'BANKRUPTCY', 'FAMILY_LAW', 'CRIMINAL'
+  title: text('title').notNull(),
+  content: text('content').notNull(),
+  category: text('category'),
+  tags: jsonb('tags'), // Array of tags
+  embedding: jsonb('embedding'), // Vector embedding for similarity search
+  relevanceScore: decimal('relevance_score', { precision: 3, scale: 2 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // Training Sessions
 export const trainingSessionsTable = pgTable('training_sessions', {
   id: text('id').primaryKey(),

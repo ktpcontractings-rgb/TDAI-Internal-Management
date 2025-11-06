@@ -1,0 +1,92 @@
+[
+  {
+    "id": "family_001",
+    "title": "Divorce Process and Grounds",
+    "specialty": "FAMILY_LAW",
+    "content": "Divorce is the legal dissolution of a marriage by a court. Michigan is a no-fault divorce state, meaning neither party needs to prove wrongdoing. The only ground for divorce is that there has been a breakdown of the marriage relationship to the extent that the objects of matrimony have been destroyed and there remains no reasonable likelihood that the marriage can be preserved. The process begins with filing a Complaint for Divorce, serving the other spouse, and waiting through a statutory waiting period (6 months with minor children, 60 days without). During this time, parties negotiate or litigate issues of property division, spousal support, child custody, parenting time, and child support. Divorce can be contested or uncontested, with uncontested divorces being faster and less expensive.",
+    "category": "divorce",
+    "tags": ["divorce", "no-fault", "complaint", "waiting period", "dissolution"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_002",
+    "title": "Child Custody: Legal vs Physical",
+    "specialty": "FAMILY_LAW",
+    "content": "Child custody has two components: legal custody and physical custody. Legal custody refers to the right to make major decisions about the child's life, including education, healthcare, and religious upbringing. Physical custody refers to where the child lives. Both types can be sole (one parent) or joint (shared). Michigan courts presume that joint legal custody is in the child's best interest unless there's evidence of domestic violence or the parents cannot cooperate. Physical custody arrangements vary widely, from primary physical custody with one parent (other has parenting time) to true 50/50 shared physical custody. Courts determine custody based on the best interest factors outlined in MCL 722.23, including the child's relationship with each parent, each parent's ability to provide love and guidance, and the child's preference if of sufficient age.",
+    "category": "custody",
+    "tags": ["child custody", "legal custody", "physical custody", "joint custody", "best interest"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_003",
+    "title": "Child Support Calculation and Enforcement",
+    "specialty": "FAMILY_LAW",
+    "content": "Child support in Michigan is calculated using the Michigan Child Support Formula, which considers both parents' incomes, number of overnights each parent has, childcare costs, health insurance premiums, and other factors. The formula aims to ensure children receive the same proportion of parental income they would have if the family remained intact. Support typically continues until the child turns 18 or graduates high school (whichever is later), up to age 19.5. Parents can agree to deviate from the formula, but courts must approve and find the agreement is in the child's best interest. Enforcement mechanisms include income withholding, tax refund intercepts, license suspension, and contempt proceedings. The Friend of the Court office assists with calculation, collection, and enforcement of support orders.",
+    "category": "child_support",
+    "tags": ["child support", "support calculation", "enforcement", "friend of court", "income withholding"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_004",
+    "title": "Spousal Support (Alimony)",
+    "specialty": "FAMILY_LAW",
+    "content": "Spousal support, also called alimony, is financial support paid by one spouse to the other during or after divorce. Unlike child support, there's no formula for calculating spousal support in Michigan. Courts consider factors including length of marriage, each party's ability to work, age and health, standard of living during marriage, each party's assets and liabilities, and contributions to the other's education or career. Support can be temporary (during divorce proceedings), rehabilitative (limited duration to allow recipient to become self-supporting), or permanent (typically only in long marriages where recipient cannot become self-supporting). Support is modifiable based on changed circumstances and typically ends upon recipient's remarriage or cohabitation. Spousal support is tax-neutral under current federal law (no longer deductible for payor or taxable to recipient for divorces finalized after 2018).",
+    "category": "spousal_support",
+    "tags": ["alimony", "spousal support", "rehabilitative support", "permanent support", "modification"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_005",
+    "title": "Property Division in Divorce",
+    "specialty": "FAMILY_LAW",
+    "content": "Michigan follows equitable distribution principles, meaning marital property is divided fairly but not necessarily equally. Marital property includes all assets and debts acquired during the marriage, regardless of whose name is on the title. Separate property (owned before marriage or received as gift/inheritance) generally remains with the original owner, but can become marital if commingled. Courts consider factors including duration of marriage, each party's contributions (including homemaking), each party's age and health, earning ability, and each party's needs. The marital home often requires special consideration, with options including sale and division of proceeds, buyout by one spouse, or deferred sale until children graduate. Retirement accounts are marital property subject to division, typically requiring a Qualified Domestic Relations Order (QDRO) for division without tax penalties.",
+    "category": "property_division",
+    "tags": ["property division", "equitable distribution", "marital property", "separate property", "QDRO"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_006",
+    "title": "Parenting Time and Visitation",
+    "specialty": "FAMILY_LAW",
+    "content": "Parenting time (formerly called visitation) refers to the time the non-custodial parent spends with the child. Michigan law presumes that parenting time with both parents is in the child's best interest unless there's evidence it would endanger the child's physical, mental, or emotional health. Courts establish parenting time schedules that specify regular schedules (weekdays, weekends, holidays, school breaks, summer vacation) and decision-making protocols. Common schedules include alternating weekends, midweek visits, and alternating holidays. For very young children, more frequent but shorter visits may be appropriate. Courts can order supervised parenting time if there are safety concerns. Parenting time orders are enforceable through contempt proceedings, and denial of parenting time can result in make-up time, modification of custody, or other sanctions. Parents can modify schedules by agreement or court order based on changed circumstances.",
+    "category": "parenting_time",
+    "tags": ["parenting time", "visitation", "parenting schedule", "supervised visitation", "enforcement"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_007",
+    "title": "Prenuptial and Postnuptial Agreements",
+    "specialty": "FAMILY_LAW",
+    "content": "Prenuptial agreements (before marriage) and postnuptial agreements (during marriage) are contracts that determine property division and spousal support in the event of divorce or death. These agreements can protect separate property, family businesses, inheritance rights, and define financial responsibilities during marriage. To be enforceable, the agreement must be in writing, signed voluntarily by both parties with full financial disclosure, and not be unconscionable. Each party should have independent legal counsel. Courts will not enforce provisions regarding child custody or child support, as these must be determined based on the child's best interest at the time of divorce. Prenups are particularly important for second marriages, business owners, individuals with significant separate property, or those with children from prior relationships. They can save significant time and expense in divorce proceedings.",
+    "category": "agreements",
+    "tags": ["prenuptial agreement", "postnuptial agreement", "marital agreement", "property protection"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_008",
+    "title": "Domestic Violence and Personal Protection Orders",
+    "specialty": "FAMILY_LAW",
+    "content": "Personal Protection Orders (PPOs) are court orders designed to protect individuals from domestic violence, stalking, or harassment. In Michigan, there are two types: domestic relationship PPOs (for family/household members or dating relationships) and non-domestic PPOs (for stalking or sexual assault by anyone). A PPO can prohibit contact, require the respondent to move out of a shared residence, prohibit purchase/possession of firearms, and grant temporary custody of minor children. Violation of a PPO is a criminal offense. PPOs can be obtained ex parte (without notice to the other party) in emergencies, with a hearing scheduled within 14 days. Domestic violence is a serious factor in custody determinations and can result in supervised parenting time or denial of custody. Victims can also seek criminal prosecution, file for divorce, and obtain exclusive use of the marital home.",
+    "category": "protection",
+    "tags": ["domestic violence", "PPO", "protection order", "restraining order", "safety"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_009",
+    "title": "Paternity Establishment and Rights",
+    "specialty": "FAMILY_LAW",
+    "content": "Paternity is the legal establishment of a father-child relationship. For married parents, the husband is presumed to be the father. For unmarried parents, paternity can be established by signing an Affidavit of Parentage at the hospital or later, or through a court order (often involving genetic testing). Establishing paternity gives the father legal rights including custody and parenting time, and creates obligations including child support. It also benefits the child by providing access to father's medical history, inheritance rights, social security benefits, and health insurance. Paternity can be challenged within 3 years of signing an Affidavit of Parentage if there's evidence of fraud, duress, or material mistake of fact. Once paternity is established, the father has the same rights and responsibilities as a father in a marriage, including the right to seek custody or parenting time.",
+    "category": "paternity",
+    "tags": ["paternity", "affidavit of parentage", "genetic testing", "father's rights", "establishment"],
+    "relevance_score": 1.0
+  },
+  {
+    "id": "family_010",
+    "title": "Modification of Custody and Support Orders",
+    "specialty": "FAMILY_LAW",
+    "content": "Custody, parenting time, and support orders can be modified when there's a change in circumstances. For custody modifications, the moving party must show either proper cause (specific facts) or a change of circumstances (significant changes since the last order). Courts then re-evaluate the best interest factors to determine if modification is appropriate. The bar is high to prevent constant relitigation. Child support can be modified when there's a change in circumstances making the existing order unfair or inappropriate, such as significant income changes, changes in number of overnights, or changes in childcare costs. A 10% change in the support amount calculated under the formula is generally considered a change of circumstances. Spousal support can be modified based on changed circumstances unless the judgment specifically makes it non-modifiable. Modifications require filing a motion with the court and cannot be made retroactively before the motion filing date.",
+    "category": "modification",
+    "tags": ["modification", "change of circumstances", "custody modification", "support modification"],
+    "relevance_score": 1.0
+  }
+]
