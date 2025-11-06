@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tantml:invoke>
-<parameter name="httpBatchLink } from '@trpc/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { httpBatchLink } from '@trpc/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { trpc } from './lib/trpc'
 import { Toaster } from 'sonner'
