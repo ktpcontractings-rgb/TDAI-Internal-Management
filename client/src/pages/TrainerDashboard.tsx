@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { trpc } from '../lib/trpc';
 
 export function TrainerDashboard() {
+  console.log('TrainerDashboard component rendering');
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('');
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
 
   // Fetch trainer status
   const { data: trainerStatus, isLoading: loadingTrainer, refetch: refetchTrainer } = trpc.trainer.getStatus.useQuery();
+  console.log('Trainer status:', { trainerStatus, loadingTrainer });
 
   // Fetch all special agents
   const { data: specialAgents, isLoading: loadingAgents, refetch: refetchAgents } = trpc.trainer.specialAgents.list.useQuery();
