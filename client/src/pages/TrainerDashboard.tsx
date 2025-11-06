@@ -47,8 +47,8 @@ export function TrainerDashboard() {
     { id: 'ip', name: 'Intellectual Property', agent: 'Coming Soon', color: 'bg-indigo-500', disabled: true },
   ];
 
-  // Show loading only on initial load, not on refetch
-  if (loadingTrainer && trainerStatus === undefined) {
+  // Show loading state
+  if (loadingTrainer) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -60,7 +60,7 @@ export function TrainerDashboard() {
   }
 
   // If trainer not initialized, show initialization screen
-  if (!trainerStatus) {
+  if (!trainerStatus || trainerStatus === null) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-8">
         <div className="max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
