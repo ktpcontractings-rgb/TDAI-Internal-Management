@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { generateAgentRecommendation } from './lib/rag-system';
 import { initializeKnowledgeBase } from './lib/knowledge-loader';
 import { generateSpeech, AGENT_VOICES } from './lib/voice';
+import { trainerRouter } from './trainer-router';
 
 const t = initTRPC.create();
 
@@ -263,6 +264,7 @@ function getBusinessSituation(role: string): string {
 
 export const appRouter = router({
   agents: agentsRouter,
+  trainer: trainerRouter,
 });
 
 export type AppRouter = typeof appRouter;
