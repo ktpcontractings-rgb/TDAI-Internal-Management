@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { trpc } from '../lib/trpc';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const Button = ({ children, onClick, disabled = false }: { children: React.ReactNode, onClick: () => void, disabled?: boolean }) => (
     <button onClick={onClick} disabled={disabled} style={{ padding: '8px', margin: '4px', border: '1px solid gray', cursor: disabled ? 'not-allowed' : 'pointer' }}>
@@ -20,6 +21,7 @@ const Card = ({ title, children }: { title: string, children: React.ReactNode })
 );
 
 const CEODashboard: React.FC = () => {
+    const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [selectedAgentId, setSelectedAgentId] = useState('cto_agent_001');
     const [expandedRecommendation, setExpandedRecommendation] = useState<string | null>(null);
@@ -96,9 +98,27 @@ const CEODashboard: React.FC = () => {
                 <h1 style={{ fontSize: '48px', fontWeight: 'bold', color: '#333', marginBottom: '10px', textAlign: 'center' }}>
                     SIGMA Command Center
                 </h1>
-                <p style={{ fontSize: '20px', color: '#666', textAlign: 'center', marginBottom: '30px' }}>
+                <p style={{ fontSize: '20px', color: '#666', textAlign: 'center', marginBottom: '20px' }}>
                     Strategic Intelligence & Management Automation
                 </p>
+                <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                    <button
+                        onClick={() => navigate('/trainer')}
+                        style={{
+                            padding: '12px 24px',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        }}
+                    >
+                        🎓 Go to Trainer Dashboard
+                    </button>
+                </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
                     {/* Agent Management Card */}
