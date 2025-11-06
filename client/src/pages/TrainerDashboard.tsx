@@ -133,7 +133,7 @@ export function TrainerDashboard() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Performance:</span>
                       <span className="text-white font-semibold">
-                        {existingAgent.performanceScore?.toFixed(1) || 'N/A'}%
+                        {existingAgent.performanceScore ? `${parseFloat(existingAgent.performanceScore).toFixed(1)}%` : 'N/A'}
                       </span>
                     </div>
                     <button
