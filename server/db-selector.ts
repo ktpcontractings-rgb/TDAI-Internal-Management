@@ -2,7 +2,9 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const isProduction = process.env.NODE_ENV === 'production';
+// Use production database if DATABASE_URL is set (Render/Neon)
+// Otherwise use mock database for local development
+const isProduction = !!process.env.DATABASE_URL;
 
 // Dynamic import based on environment
 const dbModule = isProduction 
