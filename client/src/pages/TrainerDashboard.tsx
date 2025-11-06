@@ -127,10 +127,17 @@ export function TrainerDashboard() {
           <h2 className="text-2xl font-bold text-white mb-4">Your Special Agents</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {specialAgents.map((agent: any) => (
-              <div key={agent.id} className="bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <div 
+                key={agent.id} 
+                onClick={() => window.location.href = `/chat/${agent.id}`}
+                className="bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer hover:bg-white/20 transition-all"
+              >
                 <h3 className="text-xl font-bold text-white mb-2">{agent.name}</h3>
                 <p className="text-gray-300 mb-4">{agent.specialty}</p>
-                <div className="text-sm text-gray-400">Status: {agent.status}</div>
+                <div className="text-sm text-gray-400 mb-4">Status: {agent.status}</div>
+                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Chat with {agent.name.split(' ')[0]}
+                </button>
               </div>
             ))}
           </div>
