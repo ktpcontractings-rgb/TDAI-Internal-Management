@@ -38,6 +38,8 @@ const agents: Agent[] = [];
 const agentCommunications: AgentCommunication[] = [];
 const agentDecisions: AgentDecision[] = [];
 const users: User[] = [];
+const trainerAgents: any[] = [];
+const specialAgents: any[] = [];
 
 export const db = {
   agents: {
@@ -109,6 +111,44 @@ export const db = {
       };
       users.push(newUser);
       return newUser;
+    },
+  },
+  trainerAgent: {
+    findFirst: async () => trainerAgents[0] || null,
+    create: async (trainer: any) => {
+      const newTrainer = {
+        ...trainer,
+        id: `trainer_${Date.now()}`,
+        createdAt: new Date(),
+      };
+      trainerAgents.push(newTrainer);
+      return newTrainer;
+    },
+    update: async (id: string, data: any) => {
+      const index = trainerAgents.findIndex(t => t.id === id);
+      if (index === -1) return null;
+      trainerAgents[index] = { ...trainerAgents[index], ...data };
+      return trainerAgents[index];
+    },
+  },
+  specialAgents: {
+    findMany: async () => specialAgents,
+    create: async (agent: any) => {
+      const newAgent = {
+        ...agent,
+        id: `agent_${Date.now()}`,
+        createdAt: new Date(),
+      };
+      specialAgents.push(newAgent);
+      return newAgent;
+    },
+    findById: async (id: string) => 
+      specialAgents.find(a => a.id === id) || null,
+    update: async (id: string, data: any) => {
+      const index = specialAgents.findIndex(a => a.id === id);
+      if (index === -1) return null;
+      specialAgents[index] = { ...specialAgents[index], ...data };
+      return specialAgents[index];
     },
   },
 };
