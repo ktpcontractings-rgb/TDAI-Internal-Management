@@ -1,5 +1,5 @@
 // Production database configuration using Drizzle ORM and Neon PostgreSQL
-import { pgTable, text, timestamp, serial } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, serial, jsonb } from 'drizzle-orm/pg-core';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { eq } from 'drizzle-orm';
@@ -12,7 +12,8 @@ export const agentsTable = pgTable('agents', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   role: text('role').notNull(),
-  status: text('status').notNull(),
+  status: text("status").notNull(),
+  recommendation: jsonb("recommendation"),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -64,7 +65,7 @@ export const db = {
       const results = await drizzleDb.select().from(agentsTable);
       return results;
     },
-    create: async (agent: { name: string; role: string; status: string }) => {
+    create: async (agent: { name: string; role: string; status: string; recommendation?: any }) => {
       const id = `agent_${Date.now()}`;
       const [newAgent] = await drizzleDb.insert(agentsTable).values({
         id,
@@ -76,7 +77,7 @@ export const db = {
       const [agent] = await drizzleDb.select().from(agentsTable).where(eq(agentsTable.id, id));
       return agent || null;
     },
-    update: async (id: string, data: Partial<{ name: string; role: string; status: string }>) => {
+    update: async (id: string, data: Partial<{ name: string; role: string; status: string; recommendation?: any }>) => {
       const [updated] = await drizzleDb.update(agentsTable)
         .set(data)
         .where(eq(agentsTable.id, id))
