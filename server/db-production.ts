@@ -1,5 +1,5 @@
 // Production database configuration using Drizzle ORM and Neon PostgreSQL
-import { pgTable, text, timestamp, serial, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, serial, jsonb, integer, decimal, boolean } from 'drizzle-orm/pg-core';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { eq } from 'drizzle-orm';
@@ -41,6 +41,29 @@ export const usersTable = pgTable('users', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+// Trainer Agent Table
+export const trainerAgentTable = pgTable('trainer_agent', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  status: text('status').notNull(),
+  totalAgentsTrained: integer('total_agents_trained').default(0),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// Special Agents Table
+export const specialAgentsTable = pgTable('special_agents', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  title: text('title'),
+  specialty: text('specialty').notNull(),
+  persona: jsonb('persona'),
+  knowledgeBaseId: text('knowledge_base_id'),
+  performanceScore: decimal('performance_score', { precision: 5, scale: 2 }),
+  status: text('status').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  lastTrainedAt: timestamp('last_trained_at'),
+});
+
 // --- Database Connection ---
 const DATABASE_URL = process.env.DATABASE_URL;
 
@@ -54,7 +77,9 @@ const drizzleDb = drizzle(queryClient, {
     agents: agentsTable, 
     agentDecisions: agentDecisionsTable, 
     agentCommunications: agentCommunicationsTable, 
-    users: usersTable 
+    users: usersTable,
+    trainerAgent: trainerAgentTable,
+    specialAgents: specialAgentsTable
   },
 });
 
@@ -142,4 +167,63 @@ export const db = {
       return newUser;
     },
   },
-};
+  trainerAgent: {
+    findFirst: async () => {
+      const [trainer] = await drizzleDb.select().from(trainerAgentTable).limit(1);
+      return trainer || null;
+    },
+    create: async (trainer: { name: string; status: string; totalAgentsTrained?: number }) => {
+      const id = `trainer_${Date.now()}`;
+      const [newTrainer] = await drizzleDb.insert(trainerAgentTable).values({
+        id,
+        totalAgentsTrained: 0,
+        ...trainer,
+      }).returning();
+      return newTrainer;
+    },
+    update: async (id: string, data: Partial<{ status: string; totalAgentsTrained: number }>) => {
+      const [updated] = await drizzleDb.update(trainerAgentTable)
+        .set(data)
+        .where(eq(trainerAgentTable.id, id))
+        .returning();
+      return updated || null;
+    },
+  },
+  specialAgents: {
+    findMany: async () => {
+      const results = await drizzleDb.select().from(specialAgentsTable);
+      return results;
+    },
+    create: async (agent: { 
+      name: string; 
+      title?: string;
+      specialty: string; 
+      status: string; 
+      persona?: any;
+      knowledgeBaseId?: string;
+      performanceScore?: string;
+    }) => {
+      const id = `agent_${Date.now()}`;
+      const [newAgent] = await drizzleDb.insert(specialAgentsTable).values({
+        id,
+        ...agent,
+      }).returning();
+      return newAgent;
+    },
+    findById: async (id: string) => {
+      const [agent] = await drizzleDb.select().from(specialAgentsTable).where(eq(specialAgentsTable.id, id));
+      return agent || null;
+    },
+    update: async (id: string, data: Partial<{ 
+      status: string; 
+      performanceScore: string;
+      lastTrainedAt: Date;
+    }>) => {
+      const [updated] = await drizzleDb.update(specialAgentsTable)
+        .set(data)
+        .where(eq(specialAgentsTable.id, id))
+        .returning();
+      return updated || null;
+    },
+  },
+};}

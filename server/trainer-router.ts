@@ -9,6 +9,7 @@ import {
   generateTrainingRecommendations,
   AGENT_SPECIALTIES
 } from './lib/trainer-agent';
+import { db } from './db-selector';
 
 const t = initTRPC.create();
 const publicProcedure = t.procedure;
@@ -17,20 +18,38 @@ const router = t.router;
 export const trainerRouter = router({
   // Initialize The Trainer
   initialize: publicProcedure.mutation(async () => {
+    // Check if trainer already exists
+    const existingTrainer = await db.trainerAgent.findFirst();
+    if (existingTrainer) {
+      return { trainer: existingTrainer };
+    }
+    
+    // Create new trainer
     const trainer = await initializeTrainer();
-    // TODO: Save to database
-    return { trainer };
-  }),
-
-  // Get Trainer status
-  status: publicProcedure.query(async () => {
-    // TODO: Fetch from database
-    return {
-      id: 'trainer_001',
-      name: 'Professor Atlas Sterling',
+    const savedTrainer = await db.trainerAgent.create({
+      name: trainer.name,
       status: 'active',
       totalAgentsTrained: 0,
-      activeAgents: 0
+    });
+    return { trainer: savedTrainer };
+  }),
+
+  // Get Trainer status (renamed from status to getStatus)
+  getStatus: publicProcedure.query(async () => {
+    const trainer = await db.trainerAgent.findFirst();
+    if (!trainer) {
+      return null;
+    }
+    
+    const agents = await db.specialAgents.findMany();
+    const activeAgents = agents.filter(a => a.status === 'active').length;
+    
+    return {
+      id: trainer.id,
+      name: trainer.name,
+      status: trainer.status,
+      totalAgentsTrained: trainer.totalAgentsTrained || 0,
+      activeAgents,
     };
   }),
 
@@ -39,18 +58,39 @@ export const trainerRouter = router({
     // Create a new Special Agent
     create: publicProcedure
       .input(z.object({
-        specialty: z.enum(['BANKRUPTCY', 'FAMILY_LAW', 'CRIMINAL'])
+        specialty: z.string()
       }))
       .mutation(async ({ input }) => {
-        const agent = await createSpecialAgent(input.specialty);
-        // TODO: Save to database
-        return { agent };
+        // Map specialty to uppercase format for the lib function
+        const specialtyUpper = input.specialty.toUpperCase().replace(' ', '_') as any;
+        const agent = await createSpecialAgent(specialtyUpper);
+        
+        // Save to database
+        const savedAgent = await db.specialAgents.create({
+          name: agent.name,
+          title: agent.title,
+          specialty: input.specialty,
+          status: 'active',
+          persona: agent.persona,
+          knowledgeBaseId: `kb_${input.specialty}`,
+          performanceScore: '85.0',
+        });
+        
+        // Update trainer's agent count
+        const trainer = await db.trainerAgent.findFirst();
+        if (trainer) {
+          await db.trainerAgent.update(trainer.id, {
+            totalAgentsTrained: (trainer.totalAgentsTrained || 0) + 1,
+          });
+        }
+        
+        return { agent: savedAgent };
       }),
 
     // List all Special Agents
     list: publicProcedure.query(async () => {
-      // TODO: Fetch from database
-      return [];
+      const agents = await db.specialAgents.findMany();
+      return agents;
     }),
 
     // Get specific agent details

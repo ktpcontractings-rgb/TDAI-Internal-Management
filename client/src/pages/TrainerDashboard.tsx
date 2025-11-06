@@ -6,7 +6,7 @@ export function TrainerDashboard() {
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
 
   // Fetch trainer status
-  const { data: trainerStatus, isLoading: loadingTrainer } = trpc.trainer.getStatus.useQuery();
+  const { data: trainerStatus, isLoading: loadingTrainer, refetch: refetchTrainer } = trpc.trainer.getStatus.useQuery();
 
   // Fetch all special agents
   const { data: specialAgents, isLoading: loadingAgents, refetch: refetchAgents } = trpc.trainer.specialAgents.list.useQuery();
@@ -23,7 +23,8 @@ export function TrainerDashboard() {
   // Initialize trainer mutation
   const initializeTrainer = trpc.trainer.initialize.useMutation({
     onSuccess: () => {
-      window.location.reload();
+      // Refetch trainer status instead of reloading the page
+      refetchTrainer();
     },
   });
 
@@ -46,10 +47,14 @@ export function TrainerDashboard() {
     { id: 'ip', name: 'Intellectual Property', agent: 'Coming Soon', color: 'bg-indigo-500', disabled: true },
   ];
 
-  if (loadingTrainer) {
+  // Show loading only on initial load, not on refetch
+  if (loadingTrainer && trainerStatus === undefined) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading Trainer...</div>
+        <div className="text-center">
+          <div className="text-white text-2xl mb-4">Loading Trainer...</div>
+          <div className="animate-pulse text-gray-400">Connecting to database...</div>
+        </div>
       </div>
     );
   }
