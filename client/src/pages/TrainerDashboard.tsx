@@ -3,6 +3,7 @@ import { trpc } from '../lib/trpc';
 
 export function TrainerDashboard() {
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   // Fetch trainer status
   const { data: trainerStatus, isLoading: loadingTrainer } = trpc.trainer.getStatus.useQuery();
@@ -15,6 +16,12 @@ export function TrainerDashboard() {
 
   // Create special agent mutation
   const createAgent = trpc.trainer.specialAgents.create.useMutation();
+
+  // Delete agent mutation
+  const deleteAgent = trpc.trainer.specialAgents.delete.useMutation();
+
+  // Cleanup mutation
+  const cleanupAgents = trpc.trainer.specialAgents.cleanup.useMutation();
 
   const handleInitialize = async () => {
     try {
@@ -31,6 +38,29 @@ export function TrainerDashboard() {
       window.location.reload();
     } catch (error) {
       console.error('Failed to create agent:', error);
+    }
+  };
+
+  const handleDeleteAgent = async (agentId: string) => {
+    try {
+      await deleteAgent.mutateAsync({ agentId });
+      setDeleteConfirmId(null);
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to delete agent:', error);
+    }
+  };
+
+  const handleCleanup = async () => {
+    if (!confirm('This will remove duplicate agents and rename them to professional names. Continue?')) {
+      return;
+    }
+    try {
+      const result = await cleanupAgents.mutateAsync();
+      alert(`Cleanup complete! Deleted ${result.deletedCount} duplicates, renamed ${result.renamedCount} agents. ${result.remainingAgents} agents remaining.`);
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to cleanup agents:', error);
     }
   };
 
@@ -70,11 +100,22 @@ export function TrainerDashboard() {
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8">
-          <h1 className="text-4xl font-bold text-white mb-2">🎓 The Trainer Dashboard</h1>
-          <p className="text-xl text-gray-300">Professor Atlas Sterling - Chief Training Officer</p>
-          <div className="mt-4 text-white">
-            <div className="text-3xl font-bold">{trainerStatus.totalAgentsTrained || 0}</div>
-            <div className="text-gray-300">Agents Trained</div>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">🎓 The Trainer Dashboard</h1>
+              <p className="text-xl text-gray-300">Professor Atlas Sterling - Chief Training Officer</p>
+              <div className="mt-4 text-white">
+                <div className="text-3xl font-bold">{trainerStatus.totalAgentsTrained || 0}</div>
+                <div className="text-gray-300">Agents Trained</div>
+              </div>
+            </div>
+            <button
+              onClick={handleCleanup}
+              disabled={cleanupAgents.isLoading}
+              className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50"
+            >
+              {cleanupAgents.isLoading ? 'Cleaning...' : '🧹 Cleanup & Rename'}
+            </button>
           </div>
         </div>
       </div>
@@ -129,15 +170,46 @@ export function TrainerDashboard() {
             {specialAgents.map((agent: any) => (
               <div 
                 key={agent.id} 
-                onClick={() => window.location.href = `/chat/${agent.id}`}
-                className="bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer hover:bg-white/20 transition-all"
+                className="bg-white/10 backdrop-blur-md rounded-xl p-6 relative"
               >
                 <h3 className="text-xl font-bold text-white mb-2">{agent.name}</h3>
                 <p className="text-gray-300 mb-4">{agent.specialty}</p>
                 <div className="text-sm text-gray-400 mb-4">Status: {agent.status}</div>
-                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Chat with {agent.name.split(' ')[0]}
-                </button>
+                
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => window.location.href = `/chat/${agent.id}`}
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Chat with {agent.name.split(' ')[0]}
+                  </button>
+                  
+                  {deleteConfirmId === agent.id ? (
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => handleDeleteAgent(agent.id)}
+                        disabled={deleteAgent.isLoading}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                      >
+                        ✓ Confirm
+                      </button>
+                      <button 
+                        onClick={() => setDeleteConfirmId(null)}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                      >
+                        ✗ Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => setDeleteConfirmId(agent.id)}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                      title="Delete agent"
+                    >
+                      🗑️
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

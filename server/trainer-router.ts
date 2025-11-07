@@ -113,6 +113,80 @@ export const trainerRouter = router({
         return result;
       }),
 
+    // Delete a Special Agent
+    delete: publicProcedure
+      .input(z.object({ agentId: z.string() }))
+      .mutation(async ({ input }) => {
+        await db.specialAgents.delete(input.agentId);
+        
+        // Update trainer's agent count
+        const trainer = await db.trainerAgent.findFirst();
+        if (trainer && trainer.totalAgentsTrained > 0) {
+          await db.trainerAgent.update(trainer.id, {
+            totalAgentsTrained: trainer.totalAgentsTrained - 1,
+          });
+        }
+        
+        return { success: true };
+      }),
+
+    // Cleanup duplicates and rename to professional names
+    cleanup: publicProcedure.mutation(async () => {
+      const allAgents = await db.specialAgents.findMany();
+      
+      // Group agents by specialty
+      const agentsBySpecialty: Record<string, any[]> = {};
+      for (const agent of allAgents) {
+        const specialty = agent.specialty || 'unknown';
+        if (!agentsBySpecialty[specialty]) {
+          agentsBySpecialty[specialty] = [];
+        }
+        agentsBySpecialty[specialty].push(agent);
+      }
+
+      // Professional name mapping
+      const professionalNames: Record<string, { name: string; title: string }> = {
+        'bankruptcy': { name: 'Michael Sterling', title: 'Bankruptcy Law Specialist' },
+        'family_law': { name: 'Sarah Mitchell', title: 'Family Law Specialist' },
+        'criminal': { name: 'David Morrison', title: 'Criminal Defense Specialist' }
+      };
+
+      let deletedCount = 0;
+      let renamedCount = 0;
+
+      // Process each specialty
+      for (const [specialty, agents] of Object.entries(agentsBySpecialty)) {
+        if (agents.length === 0) continue;
+
+        // Keep the first agent, delete the rest
+        const keepAgent = agents[0];
+        const deleteAgents = agents.slice(1);
+
+        // Rename the kept agent if we have a professional name
+        const professionalName = professionalNames[specialty];
+        if (professionalName) {
+          await db.specialAgents.update(keepAgent.id, {
+            name: `${professionalName.name}, Esq.`,
+            title: professionalName.title
+          });
+          renamedCount++;
+        }
+
+        // Delete duplicates
+        for (const agent of deleteAgents) {
+          await db.specialAgents.delete(agent.id);
+          deletedCount++;
+        }
+      }
+
+      return { 
+        success: true, 
+        deletedCount, 
+        renamedCount,
+        remainingAgents: allAgents.length - deletedCount
+      };
+    }),
+
     // Chat with a Special Agent
     chat: publicProcedure
       .input(z.object({
