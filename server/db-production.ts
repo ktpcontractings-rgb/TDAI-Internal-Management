@@ -215,6 +215,8 @@ export const db = {
       return agent || null;
     },
     update: async (id: string, data: Partial<{ 
+      name: string;
+      title: string;
       status: string; 
       performanceScore: string;
       lastTrainedAt: Date;
