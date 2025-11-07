@@ -4,6 +4,7 @@ import { trpc } from '../lib/trpc';
 export function TrainerDashboard() {
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [showCleanupConfirm, setShowCleanupConfirm] = useState(false);
 
   // Fetch trainer status
   const { data: trainerStatus, isLoading: loadingTrainer } = trpc.trainer.getStatus.useQuery();
@@ -52,15 +53,13 @@ export function TrainerDashboard() {
   };
 
   const handleCleanup = async () => {
-    if (!confirm('This will remove duplicate agents and rename them to professional names. Continue?')) {
-      return;
-    }
     try {
       const result = await cleanupAgents.mutateAsync();
       alert(`Cleanup complete! Deleted ${result.deletedCount} duplicates, renamed ${result.renamedCount} agents. ${result.remainingAgents} agents remaining.`);
       window.location.reload();
     } catch (error) {
       console.error('Failed to cleanup agents:', error);
+      alert('Failed to cleanup agents. Please try again.');
     }
   };
 
@@ -110,7 +109,7 @@ export function TrainerDashboard() {
               </div>
             </div>
             <button
-              onClick={handleCleanup}
+              onClick={() => setShowCleanupConfirm(true)}
               disabled={cleanupAgents.isLoading}
               className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50"
             >
@@ -212,6 +211,42 @@ export function TrainerDashboard() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Cleanup Confirmation Modal */}
+      {showCleanupConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full">
+            <h3 className="text-2xl font-bold text-white mb-4">🧹 Cleanup & Rename Agents</h3>
+            <p className="text-gray-300 mb-6">
+              This will:
+              <br />• Remove all duplicate agents
+              <br />• Rename agents to professional names
+              <br />• Keep only one agent per specialty
+              <br /><br />
+              This action cannot be undone. Continue?
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  setShowCleanupConfirm(false);
+                  handleCleanup();
+                }}
+                disabled={cleanupAgents.isLoading}
+                className="flex-1 px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all disabled:opacity-50"
+              >
+                ✓ Confirm
+              </button>
+              <button
+                onClick={() => setShowCleanupConfirm(false)}
+                disabled={cleanupAgents.isLoading}
+                className="flex-1 px-6 py-3 bg-gray-600 text-white font-bold rounded-xl hover:bg-gray-700 transition-all disabled:opacity-50"
+              >
+                ✗ Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
