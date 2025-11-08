@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { trpc } from '../lib/trpc';
+import { VoiceChat } from '../components/VoiceChat';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -13,6 +14,9 @@ export function AgentChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [showVoiceChat, setShowVoiceChat] = useState(false);
+  const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
+  const [lastAgentMessage, setLastAgentMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch agent details
@@ -29,7 +33,11 @@ export function AgentChat() {
         content: data.response,
         timestamp: new Date(),
       }]);
+      setLastAgentMessage(data.response);
+      setIsAgentSpeaking(true);
       setIsSending(false);
+      // Reset speaking state after a delay
+      setTimeout(() => setIsAgentSpeaking(false), 1000);
     },
     onError: (error) => {
       console.error('Chat error:', error);
@@ -67,6 +75,29 @@ export function AgentChat() {
     chatMutation.mutate({
       agentId,
       message: userMessage,
+      conversationHistory: messages.map(m => ({
+        role: m.role,
+        content: m.content,
+      })),
+    });
+  };
+
+  const handleVoiceInput = (text: string) => {
+    if (!agentId || isSending) return;
+
+    setIsSending(true);
+
+    // Add user message to chat
+    setMessages(prev => [...prev, {
+      role: 'user',
+      content: text,
+      timestamp: new Date(),
+    }]);
+
+    // Send to agent
+    chatMutation.mutate({
+      agentId,
+      message: text,
       conversationHistory: messages.map(m => ({
         role: m.role,
         content: m.content,
@@ -196,6 +227,14 @@ export function AgentChat() {
       <div className="bg-white/10 backdrop-blur-md border-t border-white/10 p-6">
         <form onSubmit={handleSendMessage} className="max-w-4xl mx-auto">
           <div className="flex space-x-4">
+            <button
+              type="button"
+              onClick={() => setShowVoiceChat(true)}
+              className="px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all text-2xl"
+              title="Start voice chat"
+            >
+              🎤
+            </button>
             <input
               type="text"
               value={inputMessage}
@@ -214,6 +253,17 @@ export function AgentChat() {
           </div>
         </form>
       </div>
+
+      {/* Voice Chat Modal */}
+      {showVoiceChat && agent && (
+        <VoiceChat
+          agentName={agent.name}
+          onVoiceInput={handleVoiceInput}
+          onClose={() => setShowVoiceChat(false)}
+          isAgentSpeaking={isAgentSpeaking}
+          lastAgentMessage={lastAgentMessage}
+        />
+      )}
     </div>
   );
 }
