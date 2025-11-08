@@ -227,6 +227,10 @@ export const db = {
         .returning();
       return updated || null;
     },
+    delete: async (id: string) => {
+      await drizzleDb.delete(specialAgentsTable).where(eq(specialAgentsTable.id, id));
+      return true;
+    },
   },
   
   managementAgents: {
