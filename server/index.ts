@@ -14,6 +14,8 @@ const server = createHTTPServer({
       'https://www.michiganailegalteam.com',
       'https://tdai-internal-management.vercel.app',
       'http://localhost:5173', // For local development
+      /\.manus\.space$/, // Allow all Manus-hosted domains
+      /\.manusvm\.computer$/, // Allow all Manus VM domains
     ],
     credentials: true,
   }),
