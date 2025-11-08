@@ -228,4 +228,46 @@ export const db = {
       return updated || null;
     },
   },
+  
+  managementAgents: {
+    findMany: async () => {
+      const results = await drizzleDb.select().from(managementAgentsTable);
+      return results;
+    },
+    findByRole: async (role: string) => {
+      const [agent] = await drizzleDb.select().from(managementAgentsTable).where(eq(managementAgentsTable.role, role));
+      return agent || null;
+    },
+    create: async (agent: { 
+      name: string; 
+      role: string; 
+      title: string;
+      status: string;
+      description?: string;
+    }) => {
+      const id = `mgmt_${Date.now()}`;
+      const [newAgent] = await drizzleDb.insert(managementAgentsTable).values({
+        id,
+        ...agent,
+      }).returning();
+      return newAgent;
+    },
+    findById: async (id: string) => {
+      const [agent] = await drizzleDb.select().from(managementAgentsTable).where(eq(managementAgentsTable.id, id));
+      return agent || null;
+    },
+    update: async (id: string, data: Partial<{ 
+      name: string;
+      role: string;
+      title: string;
+      status: string;
+      description?: string;
+    }>) => {
+      const [updated] = await drizzleDb.update(managementAgentsTable)
+        .set(data)
+        .where(eq(managementAgentsTable.id, id))
+        .returning();
+      return updated || null;
+    },
+  },
 };
