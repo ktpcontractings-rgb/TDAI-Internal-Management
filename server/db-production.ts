@@ -65,10 +65,10 @@ export const specialAgentsTable = pgTable('special_agents', {
 });
 
 // --- Database Connection ---
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL || process.env.DATABASE_URL2;
 
 if (!DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is not set');
+  throw new Error('DATABASE_URL or DATABASE_URL2 environment variable is not set');
 }
 
 const queryClient = postgres(DATABASE_URL);
