@@ -210,7 +210,7 @@ Return the persona as a JSON object with these fields:
 }`;
 
   const personaResponse = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-4.1-mini',
     messages: [
       { role: 'system', content: 'You are an expert AI trainer creating detailed agent personas. Always respond with valid JSON.' },
       { role: 'user', content: personaPrompt }
@@ -219,7 +219,9 @@ Return the persona as a JSON object with these fields:
   });
 
   const personaContent = personaResponse.choices[0].message.content || '{}';
-  const persona = JSON.parse(personaContent);
+  // Remove markdown code blocks if present
+  const cleanedContent = personaContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const persona = JSON.parse(cleanedContent);
 
   // Generate initial system prompt for the agent
   const systemPrompt = await generateAgentSystemPrompt(agentConfig, persona);
@@ -373,7 +375,7 @@ Return your recommendations as a JSON object with:
 }`;
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-4.1-mini',
     messages: [
       { role: 'system', content: 'You are an expert AI trainer providing performance analysis and recommendations. Always respond with valid JSON.' },
       { role: 'user', content: prompt }
@@ -382,5 +384,7 @@ Return your recommendations as a JSON object with:
   });
 
   const content = response.choices[0].message.content || '{}';
-  return JSON.parse(content);
+  // Remove markdown code blocks if present
+  const cleanedContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  return JSON.parse(cleanedContent);
 }
