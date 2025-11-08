@@ -1,8 +1,18 @@
 import { ElevenLabsClient } from "elevenlabs";
 
-const elevenlabs = new ElevenLabsClient({
-  apiKey: process.env.ELEVENLABS_API_KEY,
-});
+// Lazy initialization to avoid startup errors if API key is missing
+let elevenlabs: ElevenLabsClient | null = null;
+
+function getElevenLabsClient(): ElevenLabsClient {
+  if (!elevenlabs) {
+    const apiKey = process.env.ELEVENLABS_API_KEY;
+    if (!apiKey) {
+      throw new Error('ELEVENLABS_API_KEY environment variable is not set');
+    }
+    elevenlabs = new ElevenLabsClient({ apiKey });
+  }
+  return elevenlabs;
+}
 
 /**
  * Generate speech from text using ElevenLabs
@@ -15,9 +25,10 @@ export async function generateSpeech(
   voiceId: string = "pNInz6obpgDQGcFmaJgB" // Adam - professional male voice
 ): Promise<Buffer> {
   try {
+    const client = getElevenLabsClient();
     console.log(`🎤 Generating speech for text: "${text.substring(0, 50)}..."`);
 
-    const audio = await elevenlabs.generate({
+    const audio = await client.generate({
       voice: voiceId,
       text: text,
       model_id: "eleven_monolingual_v1",
@@ -43,7 +54,8 @@ export async function generateSpeech(
  */
 export async function getAvailableVoices() {
   try {
-    const voices = await elevenlabs.voices.getAll();
+    const client = getElevenLabsClient();
+    const voices = await client.voices.getAll();
     return voices.voices;
   } catch (error) {
     console.error("❌ Error fetching voices:", error);
