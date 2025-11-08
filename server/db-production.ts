@@ -8,7 +8,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // --- Database Schema ---
-export const agentsTable = pgTable('agents', {
+export const managementAgentsTable = pgTable('management_agents', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   role: text('role').notNull(),
@@ -74,7 +74,7 @@ if (!DATABASE_URL) {
 const queryClient = postgres(DATABASE_URL);
 const drizzleDb = drizzle(queryClient, {
   schema: { 
-    agents: agentsTable, 
+    agents: managementAgentsTable, 
     agentDecisions: agentDecisionsTable, 
     agentCommunications: agentCommunicationsTable, 
     users: usersTable,
@@ -87,30 +87,30 @@ const drizzleDb = drizzle(queryClient, {
 export const db = {
   agents: {
     findMany: async () => {
-      const results = await drizzleDb.select().from(agentsTable);
+      const results = await drizzleDb.select().from(managementAgentsTable);
       return results;
     },
     create: async (agent: { name: string; role: string; status: string; recommendation?: any }) => {
       const id = `agent_${Date.now()}`;
-      const [newAgent] = await drizzleDb.insert(agentsTable).values({
+      const [newAgent] = await drizzleDb.insert(managementAgentsTable).values({
         id,
         ...agent,
       }).returning();
       return newAgent;
     },
     findById: async (id: string) => {
-      const [agent] = await drizzleDb.select().from(agentsTable).where(eq(agentsTable.id, id));
+      const [agent] = await drizzleDb.select().from(managementAgentsTable).where(eq(managementAgentsTable.id, id));
       return agent || null;
     },
     update: async (id: string, data: Partial<{ name: string; role: string; status: string; recommendation?: any }>) => {
-      const [updated] = await drizzleDb.update(agentsTable)
+      const [updated] = await drizzleDb.update(managementAgentsTable)
         .set(data)
-        .where(eq(agentsTable.id, id))
+        .where(eq(managementAgentsTable.id, id))
         .returning();
       return updated || null;
     },
     delete: async (id: string) => {
-      const result = await drizzleDb.delete(agentsTable).where(eq(agentsTable.id, id));
+      const result = await drizzleDb.delete(managementAgentsTable).where(eq(managementAgentsTable.id, id));
       return true;
     },
   },
