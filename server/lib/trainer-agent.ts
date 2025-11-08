@@ -69,6 +69,86 @@ export const AGENT_SPECIALTIES = {
       'White collar crimes',
       'Federal criminal defense'
     ]
+  },
+  IMMIGRATION: {
+    id: 'immigration',
+    name: 'Elena',
+    fullName: 'Elena Rodriguez, Esq.',
+    title: 'Immigration Law Specialist',
+    description: 'Expert in visas, citizenship, deportation defense, and asylum cases',
+    jurisdictions: ['federal'],
+    keyAreas: [
+      'Family-based immigration',
+      'Employment-based visas',
+      'Citizenship and naturalization',
+      'Deportation defense',
+      'Asylum and refugee status',
+      'DACA and TPS'
+    ]
+  },
+  PERSONAL_INJURY: {
+    id: 'personal_injury',
+    name: 'Marcus',
+    fullName: 'Marcus Thompson, Esq.',
+    title: 'Personal Injury Specialist',
+    description: 'Expert in accident claims, medical malpractice, and workers compensation',
+    jurisdictions: ['michigan'],
+    keyAreas: [
+      'Car and truck accidents',
+      'Slip and fall injuries',
+      'Medical malpractice',
+      'Workers compensation',
+      'Product liability',
+      'Wrongful death claims'
+    ]
+  },
+  EMPLOYMENT: {
+    id: 'employment',
+    name: 'Jennifer',
+    fullName: 'Jennifer Chen, Esq.',
+    title: 'Employment Law Specialist',
+    description: 'Expert in workplace rights, discrimination, and wrongful termination',
+    jurisdictions: ['michigan', 'federal'],
+    keyAreas: [
+      'Wrongful termination',
+      'Workplace discrimination',
+      'Sexual harassment',
+      'Wage and hour disputes',
+      'FMLA and disability rights',
+      'Employment contracts'
+    ]
+  },
+  REAL_ESTATE: {
+    id: 'real_estate',
+    name: 'Robert',
+    fullName: 'Robert Harrison, Esq.',
+    title: 'Real Estate Law Specialist',
+    description: 'Expert in property transactions, landlord-tenant law, and real estate disputes',
+    jurisdictions: ['michigan'],
+    keyAreas: [
+      'Residential purchases and sales',
+      'Landlord-tenant disputes',
+      'Lease agreements',
+      'Property title issues',
+      'Foreclosure defense',
+      'Zoning and land use'
+    ]
+  },
+  ESTATE_PLANNING: {
+    id: 'estate_planning',
+    name: 'Patricia',
+    fullName: 'Patricia Williams, Esq.',
+    title: 'Estate Planning Specialist',
+    description: 'Expert in wills, trusts, probate, and estate administration',
+    jurisdictions: ['michigan'],
+    keyAreas: [
+      'Wills and testaments',
+      'Revocable living trusts',
+      'Power of attorney',
+      'Healthcare directives',
+      'Probate administration',
+      'Estate tax planning'
+    ]
   }
 };
 
