@@ -8,6 +8,7 @@ import { Toaster } from 'sonner'
 import CEODashboard from './pages/CEODashboard'
 import { TrainerDashboard } from './pages/TrainerDashboard'
 import { AgentChat } from './pages/AgentChat'
+import { InvestorDemo } from './pages/InvestorDemo'
 import './index.css'
 
 function App() {
@@ -27,7 +28,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/sigma" replace />} />
+            <Route path="/" element={<Navigate to="/demo" replace />} />
+            <Route path="/demo" element={<InvestorDemo />} />
             <Route path="/sigma" element={<CEODashboard />} />
             <Route path="/trainer" element={<TrainerDashboard />} />
             <Route path="/chat/:agentId" element={<AgentChat />} />
